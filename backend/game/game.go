@@ -48,14 +48,15 @@ func (self *Game) Move(start int, end int) error {
 	}
 
 	// switch turn
-	// if self.Turn == board.White {
-	// 	self.Turn = board.Black
-	// } else {
-	// 	self.Turn = board.White
-	// }
+	if self.Turn == board.White {
+		self.Turn = board.Black
+	} else {
+		self.Turn = board.White
+	}
 
 	self.Board.Pieces[end] = self.Board.Pieces[start]
 	self.Board.Pieces[start].SetPieceTeam(board.NoTeam)
+	self.Board.Pieces[end].SetPieceMoved()
 
 	return nil
 }

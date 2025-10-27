@@ -41,6 +41,11 @@ func (self *Piece) SetPieceTeam(t Team) {
 	*self = Piece(new)
 }
 
+func (self *Piece) SetPieceMoved() {
+	new := (uint8(*self)) | 0b00100000
+	*self = Piece(new)
+}
+
 func (self *Piece) GetPieceType() PieceType {
 	new := (uint8(*self) & 0b00000111)
 	return PieceType(new)
@@ -49,4 +54,9 @@ func (self *Piece) GetPieceType() PieceType {
 func (self *Piece) GetPieceTeam() Team {
 	new := (uint8(*self)) & 0b00011000
 	return Team(new >> 3)
+}
+
+func (self *Piece) GetPieceMoved() bool {
+	new := (uint8(*self)) & 0b00100000
+	return new>>5 == 1
 }

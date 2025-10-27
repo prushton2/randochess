@@ -42,6 +42,11 @@ function Game() {
 		let color: string = "whitetext";
 		let active: boolean = false
 		let piece: number = boardData[i];
+
+		// ignore the "has moved" bit
+		if (piece >= 32) {
+			piece -= 32
+		}
 		
 		if(piece >= 16) {
 			piece -= 16
