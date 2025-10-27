@@ -6,9 +6,9 @@ import (
 )
 
 type Game struct {
-	Ruleset rules.Ruleset
-	Board   board.Board
-	Turn    board.Team
+	Ruleset rules.Ruleset `json:"ruleset"`
+	Board   board.Board   `json:"board"`
+	Turn    board.Team    `json:"turn"`
 }
 
 func New8x8() Game {

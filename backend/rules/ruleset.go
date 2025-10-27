@@ -7,7 +7,7 @@ import (
 )
 
 type Ruleset struct {
-	Name       string
+	Name       string `json:"name"`
 	PieceRules map[board.PieceType]func(board.Board, uint8, uint8) bool
 }
 

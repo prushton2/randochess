@@ -1,5 +1,7 @@
 package board
 
+import "encoding/json"
+
 type PieceType int64
 type Team int64
 
@@ -24,6 +26,10 @@ type Piece uint8
 //      |   |
 //      |   PieceType
 //      Team
+
+func (p Piece) MarshalJSON() ([]byte, error) {
+	return json.Marshal(uint8(p))
+}
 
 func (self *Piece) SetPieceType(p PieceType) {
 	new := (uint8(*self))&0b11111000 + uint8(p)

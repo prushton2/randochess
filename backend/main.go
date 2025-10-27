@@ -1,12 +1,22 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"prushton.com/randochess/v2/board"
 	"prushton.com/randochess/v2/game"
 )
+
+type CodeInfo struct {
+	GameIndex int
+	Team      board.Team
+}
+
+var games map[int]game.Game
+var codes map[string]CodeInfo
 
 type RequestCode struct {
 	Code string `json:"code"`
@@ -18,16 +28,60 @@ type RequestMove struct {
 	End   int    `json:"end_pos"`
 }
 
-type CodeInfo struct {
-	GameIndex int
-	Team      board.Team
+type ResponseGame struct {
+	Team board.Team `json:"team"`
+	Game game.Game  `json:"game"`
 }
 
-var games map[int]game.Game
-var codes map[string]CodeInfo
-
 func fetch(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Request-Method", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
 
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body (is this a post request?)", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	var parsedBody RequestCode
+	err = json.Unmarshal(body, &parsedBody)
+	if err != nil {
+		http.Error(w, "Body is not valid JSON", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	playerInfo, exists := codes[parsedBody.Code]
+	if !exists {
+		http.Error(w, "Code isnt valid", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	gameInfo, exists := games[playerInfo.GameIndex]
+	if !exists {
+		http.Error(w, "Player points to invalid game", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	var response = ResponseGame{
+		Team: playerInfo.Team,
+		Game: gameInfo,
+	}
+
+	data, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, "Failed to serialize JSON", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	fmt.Printf("%s\n", data)
+
+	io.Writer.Write(w, data)
 }
 
 func move(w http.ResponseWriter, r *http.Request) {

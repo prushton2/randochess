@@ -3,9 +3,9 @@ package board
 import "fmt"
 
 type Board struct {
-	Width  int
-	Height int
-	Pieces []Piece
+	Width  int     `json:"width"`
+	Height int     `json:"height"`
+	Pieces []Piece `json:"pieces"`
 }
 
 func New(w uint8, h uint8) Board {
