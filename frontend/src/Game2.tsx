@@ -3,26 +3,31 @@ import { useState, useEffect } from 'react'
 import { Fetch, Move, Leave } from './axios.ts'
 import './Game.css'
 import { useSearchParams } from 'react-router-dom'
+import Team from './models/Team.ts';
 
 
 function Game() {
 	const [chessBoard, setChessBoard] = useState<JSX.Element[]>([]);
 	const [boardData, setBoardData] = useState<number[]>([]);
-	const [turn, setTurn] = useState<string>("white");
-	const [rule, setRule] = useState<string>("white");
-	const [blackSide, setBlackSide] = useState<string>("");
+	const [turn, setTurn] = useState<Team>(Team.White);
+	const [rule, setRule] = useState<string>("");
+	const [team, setTeam] = useState<Team>(Team.NoTeam);
 	const [start_pos, setStart_pos] = useState<number>(-1);
 	const [end_pos, setEnd_pos] = useState<number>(-1);
 	const [winner, setWinner] = useState<string>("");
 
 	let [query] = useSearchParams();
-	let pieces: string[] = [" ", "", "", "", "", "", ""];
+	let pieces: string[] = ["", "", "", "", "", ""];
 	
 	function manageClick(number: number) {
-		if(turn == "white" && blackSide == query.get("code") || 
-		   turn == "black" && blackSide != query.get("code")) {
-		   	return;
+		if(team == Team.NoTeam) {
+			return
 		}
+
+		if(turn != team) {
+			return
+		}
+
 		if(start_pos == -1) {
 			setStart_pos(number);
 		} else if (end_pos == -1) {
@@ -35,20 +40,24 @@ function Game() {
 
 	function RenderSquare(i: number) {
 		let color: string = "whitetext";
+		let active: boolean = false
 		let piece: number = boardData[i];
-		if(piece > 128) {
-			piece -= 128;
-			color = "blacktext";
-		}
-		if(piece >= 32) {
-			piece -= 32;
+		
+		if(piece >= 16) {
+			piece -= 16
+			active = true
 		}
 
+		if(piece >= 8) {
+			piece -= 8;
+			color = "blacktext";
+		}
+		
 		let column = i + Math.floor(i/8);
 		let classname: string = column%2==0 ? "square light" : "square dark";
 
 		return <div className={start_pos == i || end_pos == i ? "square red" : classname} key={"board element "+i} onClick={() => manageClick(i)}>
-			<label className={color}>{pieces[piece]}</label>
+			{active ? <label className={color}>{pieces[piece]}</label> : <></>}
 		</div>
 	}
 
@@ -65,7 +74,7 @@ function Game() {
 			squares.push(RenderSquare(i));
 		}
 
-		if(blackSide == query.get("code")) {
+		if(team == Team.Black) {
 			squares.reverse();
 		}
 
@@ -110,11 +119,11 @@ function Game() {
 			// 	window.location.href = "/";
 			// 	return;
 			// }
-			setBoardData(fetch["board"]);
-			setWinner(fetch["winner"]);
-			setBlackSide(fetch["black_side"]);
-			setTurn(fetch["turn"]);
-			setRule(fetch["rule"]);
+			setBoardData(fetch.game.board.pieces);
+			setTeam(fetch.team)
+			// setWinner(fetch["winner"]);
+			setTurn(fetch.game.turn);
+			setRule(fetch.game.ruleset.name);
 		}, 1000);
 		
 
