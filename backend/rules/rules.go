@@ -26,7 +26,7 @@ func SelectRuleset(name string) Ruleset {
 		return allRulesets["Open World"]
 	}
 
-	return allRulesets["Open World"]
+	return allRulesets[name]
 }
 
 func CheckLineOfSight(self board.Board, start int, end int) bool {
