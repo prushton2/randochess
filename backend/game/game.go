@@ -34,11 +34,21 @@ func (self *Game) Move(start int, end int) error {
 		return fmt.Errorf("Invalid start/end pos")
 	}
 
-	if self.Turn == board.White {
-		self.Turn = board.Black
-	} else {
-		self.Turn = board.White
+	rule, exists := self.Ruleset.PieceRules[self.Board.Pieces[start].GetPieceType()]
+	if !exists {
+		return fmt.Errorf("No rule found for piece")
 	}
+
+	if !rule(self.Board, uint8(start), uint8(end)) {
+		return fmt.Errorf("Invalid move")
+	}
+
+	// switch turn
+	// if self.Turn == board.White {
+	// 	self.Turn = board.Black
+	// } else {
+	// 	self.Turn = board.White
+	// }
 
 	self.Board.Pieces[end] = self.Board.Pieces[start]
 	self.Board.Pieces[start].SetPieceTeam(board.NoTeam)

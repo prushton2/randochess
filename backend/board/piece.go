@@ -15,9 +15,9 @@ const ( // 3 bits
 )
 
 const ( // 2 bits
-	NoTeam Team = 0b00
-	White  Team = 0b10
-	Black  Team = 0b11
+	NoTeam Team = 0
+	White  Team = 2
+	Black  Team = 3
 )
 
 type Piece uint8
