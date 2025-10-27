@@ -1,6 +1,8 @@
 package game
 
 import (
+	"fmt"
+
 	"prushton.com/randochess/v2/board"
 	"prushton.com/randochess/v2/rules"
 )
@@ -21,4 +23,25 @@ func New8x8() Game {
 	game.Board.Init8x8Board()
 
 	return game
+}
+
+func (self *Game) Move(start int, end int) error {
+	if self.Board.Pieces[start].GetPieceTeam() != self.Turn {
+		return fmt.Errorf("Incorrect Turn")
+	}
+
+	if start >= self.Board.Height*self.Board.Width || end >= self.Board.Height*self.Board.Width || start < 0 || end < 0 {
+		return fmt.Errorf("Invalid start/end pos")
+	}
+
+	if self.Turn == board.White {
+		self.Turn = board.Black
+	} else {
+		self.Turn = board.White
+	}
+
+	self.Board.Pieces[end] = self.Board.Pieces[start]
+	self.Board.Pieces[start].SetPieceTeam(board.NoTeam)
+
+	return nil
 }

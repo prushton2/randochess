@@ -85,7 +85,49 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 }
 
 func move(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Request-Method", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
 
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body (is this a post request?)", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	var parsedBody RequestMove
+	err = json.Unmarshal(body, &parsedBody)
+	if err != nil {
+		http.Error(w, "Body is not valid JSON", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	playerInfo, exists := codes[parsedBody.Code]
+	if !exists {
+		http.Error(w, "Code isnt valid", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	gameInfo, exists := games[playerInfo.GameIndex]
+	if !exists {
+		http.Error(w, "Player points to invalid game", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	err = gameInfo.Move(parsedBody.Start, parsedBody.End)
+	if err != nil {
+		http.Error(w, "Invalid Move", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	games[playerInfo.GameIndex] = gameInfo
+
+	io.WriteString(w, "{\"status\": \"success\"}")
 }
 
 func main() {
