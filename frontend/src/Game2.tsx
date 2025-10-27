@@ -105,11 +105,11 @@ function Game() {
 				code = "";
 			}
 			let fetch = await Fetch(code)
-			if(fetch["status"] != "Success") {
-				alert("Game no longer exists");
-				window.location.href = "/";
-				return;
-			}
+			// if(fetch["status"] != "Success") {
+			// 	alert("Game no longer exists");
+			// 	window.location.href = "/";
+			// 	return;
+			// }
 			setBoardData(fetch["board"]);
 			setWinner(fetch["winner"]);
 			setBlackSide(fetch["black_side"]);
