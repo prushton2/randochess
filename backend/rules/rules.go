@@ -3,6 +3,7 @@ package rules
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 
 	"prushton.com/randochess/v2/board"
 )
@@ -24,7 +25,12 @@ func (self Ruleset) MarshalJSON() ([]byte, error) {
 
 func SelectRuleset(name string) (Ruleset, error) {
 	if name == "Random" {
-		return allRulesets["Open World"], nil
+		keys := make([]string, 0, len(allRulesets))
+		for k := range allRulesets {
+			keys = append(keys, k)
+		}
+		randomKey := keys[rand.Intn(len(keys))]
+		return allRulesets[randomKey], nil
 	}
 
 	ruleset, exists := allRulesets[name]
