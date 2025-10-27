@@ -11,6 +11,7 @@ type Game struct {
 	Ruleset rules.Ruleset `json:"ruleset"`
 	Board   board.Board   `json:"board"`
 	Turn    board.Team    `json:"turn"`
+	Winner  board.Team    `json:"winner"`
 }
 
 func New(rulesetName string) (Game, error) {
@@ -24,6 +25,7 @@ func New(rulesetName string) (Game, error) {
 		Board:   board.New(ruleset.Width, ruleset.Height),
 		Ruleset: ruleset,
 		Turn:    board.White,
+		Winner:  board.NoTeam,
 	}
 
 	game.Board.InitBoard()
@@ -54,10 +56,10 @@ func (self *Game) Move(start int, end int) error {
 	}
 
 	// switch turn
-	if self.Turn == board.White {
-		self.Turn = board.Black
-	} else {
-		self.Turn = board.White
+	self.Turn = self.Turn.OtherTeam()
+
+	if self.Board.Pieces[end].GetPieceType() == board.King {
+		self.Winner = self.Board.Pieces[end].GetPieceTeam().OtherTeam()
 	}
 
 	self.Board.Pieces[end] = self.Board.Pieces[start]

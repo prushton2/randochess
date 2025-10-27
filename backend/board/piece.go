@@ -60,3 +60,10 @@ func (self *Piece) GetPieceMoved() bool {
 	new := (uint8(*self)) & 0b00100000
 	return new>>5 == 1
 }
+
+func (self Team) OtherTeam() Team {
+	if self == NoTeam {
+		return NoTeam
+	}
+	return Team(uint8(self) ^ 0b1)
+}

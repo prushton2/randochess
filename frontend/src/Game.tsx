@@ -15,7 +15,7 @@ function Game() {
 	const [team, setTeam] = useState<Team>(Team.NoTeam);
 	const [start_pos, setStart_pos] = useState<number>(-1);
 	const [end_pos, setEnd_pos] = useState<number>(-1);
-	const [winner, setWinner] = useState<string>("");
+	const [winner, setWinner] = useState<Team>(0);
 
 	let [query] = useSearchParams();
 	let pieces: string[] = ["", "", "", "", "", ""];
@@ -62,21 +62,21 @@ function Game() {
 		if (piece > 6) {
 			console.log(piece)
 		}
-		
-		// console.log()
 
 		let column = Math.floor(i/boardDimensions[0])
 		let classname: string = (i+column) % 2 == 0 ? "square light" : "square dark";
 
-		return <div className={start_pos == i || end_pos == i ? "square red" : classname} key={"board element "+i} onClick={() => manageClick(i)}>
+		return <div className={start_pos == i || end_pos == i ? "square red" : classname} key={"board element "+i} onClick={() => {if (winner == Team.NoTeam) {manageClick(i)} }}>
 			{active ? <label className={color}>{pieces[piece]}</label> : <></>}
 		</div>
 	}
 
 	useEffect(() => {
-		if(winner != "") {
-			return;
+		if(winner != Team.NoTeam) {
+			alert(`${winner == 2 ? "White" : "Black"} Won`)
+			return
 		}
+
 		let squares: JSX.Element[] = []
 		
 		for(let i: number = 0; i < boardDimensions[0]*boardDimensions[1]; i++) {
@@ -116,11 +116,17 @@ function Game() {
 				return;
 			}
 		}
-		run();
+		if(winner == Team.NoTeam) {
+			run();
+		}
 	}, [start_pos, end_pos])
 	
 	useEffect(() => {
 		let interval = setInterval(async() => {
+			if(winner != 0) {
+				return
+			}
+
 			let code = query.get("code")
 			if(code == null) {
 				code = "";
@@ -134,7 +140,7 @@ function Game() {
 			setBoardData(fetch.game.board.pieces);
 			setBoardDimensions([fetch.game.board.width, fetch.game.board.height]);
 			setTeam(fetch.team)
-			// setWinner(fetch["winner"]);
+			setWinner(fetch.game.winner);
 			setTurn(fetch.game.turn);
 			setRule(fetch.game.ruleset.name);
 		}, 1000);
