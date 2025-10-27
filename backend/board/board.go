@@ -8,7 +8,7 @@ type Board struct {
 	Pieces []Piece `json:"pieces"`
 }
 
-func New(w uint8, h uint8) Board {
+func New(w int, h int) Board {
 	return Board{
 		Width:  int(w),
 		Height: int(h),
@@ -16,25 +16,29 @@ func New(w uint8, h uint8) Board {
 	}
 }
 
-func (self *Board) Init8x8Board() error {
-	if self.Width != 8 || self.Height != 8 {
-		return fmt.Errorf("Cannot init board, not 8x8")
+func (self *Board) InitBoard() error {
+	if self.Height%2 == 1 || self.Width%2 == 1 {
+		return fmt.Errorf("Cannot init board with odd width or height")
 	}
+	heightOffset := (self.Height - 8) / 2
+	widthOffset := (self.Width - 8) / 2
+
+	offset := heightOffset*self.Width + widthOffset
 
 	backRow := [8]PieceType{Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook}
 
 	for i := range 8 {
-		self.Pieces[i].SetPieceTeam(Black)
-		self.Pieces[i].SetPieceType(backRow[i])
+		self.Pieces[offset+i].SetPieceTeam(Black)
+		self.Pieces[offset+i].SetPieceType(backRow[i])
 
-		self.Pieces[56+i].SetPieceTeam(White)
-		self.Pieces[56+i].SetPieceType(backRow[i])
+		self.Pieces[offset+56+i].SetPieceTeam(White)
+		self.Pieces[offset+56+i].SetPieceType(backRow[i])
 
-		self.Pieces[8+i].SetPieceTeam(Black)
-		self.Pieces[8+i].SetPieceType(Pawn)
+		self.Pieces[offset+8+i].SetPieceTeam(Black)
+		self.Pieces[offset+8+i].SetPieceType(Pawn)
 
-		self.Pieces[48+i].SetPieceTeam(White)
-		self.Pieces[48+i].SetPieceType(Pawn)
+		self.Pieces[offset+48+i].SetPieceTeam(White)
+		self.Pieces[offset+48+i].SetPieceType(Pawn)
 	}
 
 	return nil

@@ -9,6 +9,8 @@ import (
 type Ruleset struct {
 	Name       string `json:"name"`
 	PieceRules map[board.PieceType]func(board.Board, int, int) bool
+	Width      int
+	Height     int
 }
 
 func (self Ruleset) MarshalJSON() ([]byte, error) {
@@ -19,20 +21,12 @@ func (self Ruleset) MarshalJSON() ([]byte, error) {
 	return json.Marshal(MarshalableRuleset{Name: self.Name})
 }
 
-func DefaultRuleset() Ruleset {
-	ruleset := Ruleset{
-		Name:       "Default",
-		PieceRules: make(map[board.PieceType]func(board.Board, int, int) bool),
+func SelectRuleset(name string) Ruleset {
+	if name == "Random" {
+		return allRulesets["Open World"]
 	}
 
-	ruleset.PieceRules[board.Pawn] = DefaultPawn
-	ruleset.PieceRules[board.Rook] = DefaultRook
-	ruleset.PieceRules[board.Knight] = DefaultKnight
-	ruleset.PieceRules[board.Bishop] = DefaultBishop
-	ruleset.PieceRules[board.King] = DefaultKing
-	ruleset.PieceRules[board.Queen] = DefaultQueen
-
-	return ruleset
+	return allRulesets["Open World"]
 }
 
 func CheckLineOfSight(self board.Board, start int, end int) bool {

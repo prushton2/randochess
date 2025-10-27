@@ -13,14 +13,17 @@ type Game struct {
 	Turn    board.Team    `json:"turn"`
 }
 
-func New8x8() Game {
+func New(rulesetName string) Game {
+
+	ruleset := rules.SelectRuleset(rulesetName)
+
 	game := Game{
-		Board:   board.New(8, 8),
-		Ruleset: rules.DefaultRuleset(),
+		Board:   board.New(ruleset.Width, ruleset.Height),
+		Ruleset: ruleset,
 		Turn:    board.White,
 	}
 
-	game.Board.Init8x8Board()
+	game.Board.InitBoard()
 
 	return game
 }

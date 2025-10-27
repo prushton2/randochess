@@ -135,7 +135,7 @@ func main() {
 	games = make(map[int]game.Game)
 	codes = make(map[string]CodeInfo)
 
-	games[0] = game.New8x8()
+	games[0] = game.New("Open World")
 	codes["0"] = CodeInfo{GameIndex: 0, Team: board.White}
 	codes["1"] = CodeInfo{GameIndex: 0, Team: board.Black}
 
