@@ -2,6 +2,7 @@ package rules
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"prushton.com/randochess/v2/board"
 )
@@ -21,12 +22,17 @@ func (self Ruleset) MarshalJSON() ([]byte, error) {
 	return json.Marshal(MarshalableRuleset{Name: self.Name})
 }
 
-func SelectRuleset(name string) Ruleset {
+func SelectRuleset(name string) (Ruleset, error) {
 	if name == "Random" {
-		return allRulesets["Open World"]
+		return allRulesets["Open World"], nil
 	}
 
-	return allRulesets[name]
+	ruleset, exists := allRulesets[name]
+	if !exists {
+		return Ruleset{}, fmt.Errorf("Invalid name")
+	}
+
+	return ruleset, nil
 }
 
 func CheckLineOfSight(self board.Board, start int, end int) bool {

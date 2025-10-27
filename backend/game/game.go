@@ -13,9 +13,12 @@ type Game struct {
 	Turn    board.Team    `json:"turn"`
 }
 
-func New(rulesetName string) Game {
+func New(rulesetName string) (Game, error) {
 
-	ruleset := rules.SelectRuleset(rulesetName)
+	ruleset, err := rules.SelectRuleset(rulesetName)
+	if err != nil {
+		return Game{}, err
+	}
 
 	game := Game{
 		Board:   board.New(ruleset.Width, ruleset.Height),
@@ -25,7 +28,7 @@ func New(rulesetName string) Game {
 
 	game.Board.InitBoard()
 
-	return game
+	return game, nil
 }
 
 func (self *Game) Move(start int, end int) error {
