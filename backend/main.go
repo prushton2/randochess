@@ -28,9 +28,35 @@ type RequestMove struct {
 	End   int    `json:"end_pos"`
 }
 
-type ResponseGame struct {
+type ResponseFetch struct {
 	Team board.Team `json:"team"`
 	Game game.Game  `json:"game"`
+}
+
+type RequestNew struct {
+	RuleName string `json:"ruleName"`
+}
+
+func new(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Request-Method", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body (is this a post request?)", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	var parsedBody RequestNew
+	err = json.Unmarshal(body, &parsedBody)
+	if err != nil {
+		http.Error(w, "Body is not valid JSON", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
 }
 
 func fetch(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +93,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var response = ResponseGame{
+	var response = ResponseFetch{
 		Team: playerInfo.Team,
 		Game: gameInfo,
 	}
@@ -135,10 +161,11 @@ func main() {
 	games = make(map[int]game.Game)
 	codes = make(map[string]CodeInfo)
 
-	games[0] = game.New("Open World")
+	games[0] = game.New("PREPARE THYSELF")
 	codes["0"] = CodeInfo{GameIndex: 0, Team: board.White}
 	codes["1"] = CodeInfo{GameIndex: 0, Team: board.Black}
 
+	http.HandleFunc("/game/new", new)
 	http.HandleFunc("/game/fetch", fetch)
 	http.HandleFunc("/game/move", move)
 
