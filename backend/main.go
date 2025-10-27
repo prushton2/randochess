@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"prushton.com/randochess/v2/board"
+	"prushton.com/randochess/v2/game"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	board := board.New(8, 8)
-	board.Init8x8Board()
-
+	game := game.New8x8()
+	fmt.Printf("%s\n", game.Ruleset.Name)
 }
 
 func main() {
