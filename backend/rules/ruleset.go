@@ -2,14 +2,13 @@ package rules
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"prushton.com/randochess/v2/board"
 )
 
 type Ruleset struct {
 	Name       string `json:"name"`
-	PieceRules map[board.PieceType]func(board.Board, uint8, uint8) bool
+	PieceRules map[board.PieceType]func(board.Board, int, int) bool
 }
 
 func (self Ruleset) MarshalJSON() ([]byte, error) {
@@ -23,7 +22,7 @@ func (self Ruleset) MarshalJSON() ([]byte, error) {
 func DefaultRuleset() Ruleset {
 	ruleset := Ruleset{
 		Name:       "Default",
-		PieceRules: make(map[board.PieceType]func(board.Board, uint8, uint8) bool),
+		PieceRules: make(map[board.PieceType]func(board.Board, int, int) bool),
 	}
 
 	ruleset.PieceRules[board.Pawn] = DefaultPawn
@@ -50,7 +49,7 @@ func CheckLineOfSight(self board.Board, start int, end int) bool {
 	var delta_x int = start%self.Width - end%self.Width
 	var delta_y int = start/self.Height - end/self.Height
 
-	fmt.Printf("dx: %d\ndy: %d\n", delta_x, delta_y)
+	// fmt.Printf("dx: %d\ndy: %d\n", delta_x, delta_y)
 
 	// handle off cases like the horse where you dont move in a straight line, you are just allowed to move.
 	if delta_x != 0 && delta_y != 0 {
@@ -87,7 +86,7 @@ func CheckLineOfSight(self board.Board, start int, end int) bool {
 			hasLOS = false
 		}
 	}
-	fmt.Print("\n")
+	// fmt.Print("\n")
 
 	return hasLOS
 }

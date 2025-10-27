@@ -39,8 +39,12 @@ func (self *Game) Move(start int, end int) error {
 		return fmt.Errorf("No rule found for piece")
 	}
 
-	if !rule(self.Board, uint8(start), uint8(end)) {
+	if !rule(self.Board, start, end) {
 		return fmt.Errorf("Invalid move")
+	}
+
+	if self.Board.Pieces[start].GetPieceTeam() == self.Board.Pieces[end].GetPieceTeam() {
+		return fmt.Errorf("Cannot take own team's piece")
 	}
 
 	// switch turn
