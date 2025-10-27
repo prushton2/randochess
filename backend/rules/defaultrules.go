@@ -17,11 +17,11 @@ func DefaultPawn(self board.Board, start int, end int) bool {
 
 	// moving 1 space or 2 on first turn
 	if (Abs(delta_y) == 1 && delta_x == 0) || (Abs(delta_y) == 2 && !self.Pieces[start].GetPieceMoved()) {
-		return self.Pieces[end].GetPieceTeam() == board.NoTeam
+		return self.Pieces[end].GetPieceTeam() == board.NoTeam && CheckLineOfSight(self, start, end)
 	}
 
 	// taking
-	if Abs(delta_y) == 1 && Abs(delta_x) == 1 && self.Pieces[start].GetPieceTeam() != self.Pieces[end].GetPieceTeam() {
+	if Abs(delta_y) == 1 && Abs(delta_x) == 1 && self.Pieces[end].GetPieceTeam() != board.NoTeam {
 		return true
 	}
 

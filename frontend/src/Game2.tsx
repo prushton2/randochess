@@ -57,6 +57,10 @@ function Game() {
 			piece -= 8;
 			color = "blacktext";
 		}
+
+		if (piece > 6) {
+			console.log(piece)
+		}
 		
 		let column = i + Math.floor(i/8);
 		let classname: string = column%2==0 ? "square light" : "square dark";
