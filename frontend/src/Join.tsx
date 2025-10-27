@@ -12,8 +12,8 @@ function App() {
 	async function create_game() {
 		let codes = await CreateGame(ruleset);
 		console.log(codes);
-		localStorage.setItem("guest_code", codes.guest_code);
-		window.location.href = `/play?code=${codes.host_code}`;
+		localStorage.setItem("guest_code", codes.guestCode);
+		window.location.href = `/play?code=${codes.hostCode}`;
 	}
 	async function join_game() {
 		let result: string = await JoinGame(code);

@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
+	"strconv"
 
 	"prushton.com/randochess/v2/board"
 	"prushton.com/randochess/v2/game"
@@ -37,6 +39,11 @@ type RequestNew struct {
 	RuleName string `json:"ruleName"`
 }
 
+type ResponseNew struct {
+	HostCode  string `json:"hostCode"`
+	GuestCode string `json:"guestCode"`
+}
+
 func new(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Request-Method", "*")
@@ -57,6 +64,59 @@ func new(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// gen random numbers for ids
+	exists := true
+	gameID := 0
+	for exists {
+		gameID = rand.Intn(10000)
+		_, exists = games[gameID]
+	}
+
+	exists = true
+	hostID := "0"
+	for exists {
+		hostID = strconv.Itoa(rand.Intn(10000))
+		_, exists = codes[hostID]
+	}
+
+	exists = true
+	guestID := "0"
+	for exists {
+		guestID = strconv.Itoa(rand.Intn(10000))
+		_, exists = codes[guestID]
+	}
+
+	newgame, err := game.New(parsedBody.RuleName)
+	if err != nil {
+		newgame, _ = game.New("Random")
+	}
+
+	host := CodeInfo{
+		GameIndex: gameID,
+		Team:      board.White,
+	}
+
+	guest := CodeInfo{
+		GameIndex: gameID,
+		Team:      board.Black,
+	}
+
+	games[gameID] = newgame
+	codes[hostID] = host
+	codes[guestID] = guest
+
+	response := ResponseNew{
+		HostCode:  hostID,
+		GuestCode: guestID,
+	}
+
+	bytes, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, "invalid json", http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+	io.Writer.Write(w, bytes)
 }
 
 func fetch(w http.ResponseWriter, r *http.Request) {
@@ -161,7 +221,7 @@ func main() {
 	games = make(map[int]game.Game)
 	codes = make(map[string]CodeInfo)
 
-	games[0], _ = game.New("PREPARE THYSELF")
+	games[0], _ = game.New("Open World")
 	codes["0"] = CodeInfo{GameIndex: 0, Team: board.White}
 	codes["1"] = CodeInfo{GameIndex: 0, Team: board.Black}
 

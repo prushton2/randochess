@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { ResponseGame } from './models/ResponseGame';
 import { Status } from './models/Status';
+import NewGameResponse from './models/NewGameResponse';
 
-export async function CreateGame(ruleName: string) {
+export async function CreateGame(ruleName: string): Promise<NewGameResponse> {
 	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/new`;
 	const response = await axios.post(url, `{"ruleName": "${ruleName}"}`);
-	return response.data;
+	return response.data as NewGameResponse;
 }
 
 export async function JoinGame(code: string) {

@@ -63,7 +63,7 @@ function Game() {
 			console.log(piece)
 		}
 		
-		console.log()
+		// console.log()
 
 		let column = Math.floor(i/boardDimensions[0])
 		let classname: string = (i+column) % 2 == 0 ? "square light" : "square dark";
