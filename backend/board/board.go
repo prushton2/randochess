@@ -31,14 +31,14 @@ func (self *Board) InitBoard() error {
 		self.Pieces[offset+i].SetPieceTeam(Black)
 		self.Pieces[offset+i].SetPieceType(backRow[i])
 
-		self.Pieces[offset+56+i].SetPieceTeam(White)
-		self.Pieces[offset+56+i].SetPieceType(backRow[i])
+		self.Pieces[offset+i+self.Width].SetPieceTeam(Black)
+		self.Pieces[offset+i+self.Width].SetPieceType(Pawn)
 
-		self.Pieces[offset+8+i].SetPieceTeam(Black)
-		self.Pieces[offset+8+i].SetPieceType(Pawn)
+		self.Pieces[offset+i+self.Width*6].SetPieceTeam(White)
+		self.Pieces[offset+i+self.Width*6].SetPieceType(Pawn)
 
-		self.Pieces[offset+48+i].SetPieceTeam(White)
-		self.Pieces[offset+48+i].SetPieceType(Pawn)
+		self.Pieces[offset+i+self.Width*7].SetPieceTeam(White)
+		self.Pieces[offset+i+self.Width*7].SetPieceType(backRow[i])
 	}
 
 	return nil
