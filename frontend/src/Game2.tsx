@@ -91,7 +91,7 @@ function Game() {
 			if(code == null) {
 				code = "";
 			}
-			if ((await Move(code, start_pos, end_pos)).status == "Success") {
+			if ((await Move(code, start_pos, end_pos)).status == "success") {
 
 				//do the move client side so its more responsive
 				let newBoard: number[] = boardData;
