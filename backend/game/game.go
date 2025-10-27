@@ -2,16 +2,18 @@ package game
 
 import (
 	"fmt"
+	"time"
 
 	"prushton.com/randochess/v2/board"
 	"prushton.com/randochess/v2/rules"
 )
 
 type Game struct {
-	Ruleset rules.Ruleset `json:"ruleset"`
-	Board   board.Board   `json:"board"`
-	Turn    board.Team    `json:"turn"`
-	Winner  board.Team    `json:"winner"`
+	Ruleset         rules.Ruleset `json:"ruleset"`
+	Board           board.Board   `json:"board"`
+	Turn            board.Team    `json:"turn"`
+	Winner          board.Team    `json:"winner"`
+	LastRequestedAt int64         `json:"lastRequestedAt"`
 }
 
 func New(rulesetName string) (Game, error) {
@@ -22,10 +24,11 @@ func New(rulesetName string) (Game, error) {
 	}
 
 	game := Game{
-		Board:   board.New(ruleset.Width, ruleset.Height),
-		Ruleset: ruleset,
-		Turn:    board.White,
-		Winner:  board.NoTeam,
+		Board:           board.New(ruleset.Width, ruleset.Height),
+		Ruleset:         ruleset,
+		Turn:            board.White,
+		Winner:          board.NoTeam,
+		LastRequestedAt: time.Now().Unix(),
 	}
 
 	game.Board.InitBoard()
@@ -34,6 +37,8 @@ func New(rulesetName string) (Game, error) {
 }
 
 func (self *Game) Move(start int, end int) error {
+	self.LastRequestedAt = time.Now().Unix()
+
 	if self.Board.Pieces[start].GetPieceTeam() != self.Turn {
 		return fmt.Errorf("Incorrect Turn")
 	}

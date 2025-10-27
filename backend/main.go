@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+	"time"
 
 	"prushton.com/randochess/v2/board"
 	"prushton.com/randochess/v2/game"
@@ -216,6 +217,33 @@ func move(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "{\"status\": \"success\"}")
 }
 
+func collectGarbageThread() {
+	for {
+		if time.Now().Unix()%300 == 0 {
+			collectGarbage()
+		}
+		time.Sleep(1 * time.Second)
+	}
+}
+
+func collectGarbage() {
+	// fmt.Println("Collecting Garbage")
+	for k, v := range games {
+		if time.Now().Unix() > v.LastRequestedAt+600 {
+			// fmt.Printf("Deleted game id %d\n", k)
+			delete(games, k)
+		}
+	}
+
+	for k, v := range codes {
+		_, exists := games[v.GameIndex]
+		if !exists {
+			// fmt.Printf("Deleted code %s\n", k)
+			delete(codes, k)
+		}
+	}
+}
+
 func main() {
 
 	games = make(map[int]game.Game)
@@ -224,6 +252,8 @@ func main() {
 	games[0], _ = game.New("Open World")
 	codes["0"] = CodeInfo{GameIndex: 0, Team: board.White}
 	codes["1"] = CodeInfo{GameIndex: 0, Team: board.Black}
+
+	go collectGarbageThread()
 
 	http.HandleFunc("/game/new", new)
 	http.HandleFunc("/game/fetch", fetch)
