@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Join from './Join.tsx'
 import Game from './Game.tsx'
+import Game2 from './Game2.tsx'
 import './index.css'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
    path: "/play",
    element: <Game />
+  },
+  {
+   path: "/test",
+   element: <Game2 />
   }
 ]);
 

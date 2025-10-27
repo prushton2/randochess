@@ -7,25 +7,25 @@ export async function CreateGame() {
 }
 
 export async function JoinGame(code: string) {
-	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/exists/${code}`;
-	const response = await axios.get(url);
+	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/exists`;
+	const response = await axios.post(url, `{"code": "${code}"}`);
 	return response.data;
 }
 
 export async function Fetch(code: string) {
-	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/fetch/${code}`;
-	const response = await axios.get(url);
+	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/fetch`;
+	const response = await axios.post(url, `{"code": "${code}"}`);
 	return response.data;
 }
 
 export async function Move(code: string, start_pos: number, end_pos: number) {
-	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/move/${code}`;
-	const response = await axios.post(url, `${start_pos}\n${end_pos}`);
+	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/move`;
+	const response = await axios.post(url, `{"code": "${code}", "start_pos": ${start_pos}, "end_pos": ${end_pos}}`);
 	return response.data;
 }
 
 export async function Leave(code: string) {
-	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/leave/${code}`;
-	const response = await axios.get(url);
+	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/leave`;
+	const response = await axios.post(url, `{"code": "${code}"}`);
 	return response.data;
 }
