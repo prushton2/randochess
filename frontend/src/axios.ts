@@ -9,12 +9,6 @@ export async function CreateGame(ruleName: string): Promise<NewGameResponse> {
 	return response.data as NewGameResponse;
 }
 
-export async function JoinGame(code: string) {
-	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/exists`;
-	const response = await axios.post(url, `{"code": "${code}"}`);
-	return response.data;
-}
-
 export async function Fetch(code: string): Promise<ResponseGame> {
 	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/fetch`;
 	const response = await axios.post(url, `{"code": "${code}"}`);
@@ -25,10 +19,4 @@ export async function Move(code: string, start_pos: number, end_pos: number): Pr
 	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/move`;
 	const response = await axios.post(url, `{"code": "${code}", "start_pos": ${start_pos}, "end_pos": ${end_pos}}`);
 	return response.data as Status;
-}
-
-export async function Leave(code: string) {
-	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/leave`;
-	const response = await axios.post(url, `{"code": "${code}"}`);
-	return response.data;
 }

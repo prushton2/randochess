@@ -1,6 +1,6 @@
 //import font from '/public/3270NerdFont-Regular.ttf'
 import { useState, useEffect } from 'react'
-import { Fetch, Move, Leave } from './axios.ts'
+import { Fetch, Move } from './axios.ts'
 import './Game.css'
 import { useSearchParams } from 'react-router-dom'
 import Team from './models/Team.ts';
@@ -150,11 +150,7 @@ function Game() {
 	}, [boardData]);
 	
 	async function leaveGame() {
-		let code = query.get("code")
-		if(code == null) {
-			code = "";
-		}
-		await Leave(code);
+		localStorage.removeItem("guest_code")
 		window.location.href = "/";
 	}
 	

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {CreateGame, JoinGame} from "./axios.ts"
+import {CreateGame} from "./axios.ts"
 import './App.css'
 
 
@@ -16,12 +16,7 @@ function App() {
 		window.location.href = `/play?code=${codes.hostCode}`;
 	}
 	async function join_game() {
-		let result: string = await JoinGame(code);
-		if(result == "1") {
-			window.location.href = `/play?code=${code}`;
-		} else {
-			alert("Invalid Code");
-		}
+		window.location.href = `/play?code=${code}`;
 	}
 
 	return (
@@ -37,7 +32,7 @@ function App() {
 			</select>
 		</label>
 		<button onClick={create_game}>
-		      Create Game
+			Create Game
 		</button>
 		<br/><br/>
 		or
