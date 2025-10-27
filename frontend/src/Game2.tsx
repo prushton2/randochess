@@ -9,6 +9,7 @@ import Team from './models/Team.ts';
 function Game() {
 	const [chessBoard, setChessBoard] = useState<JSX.Element[]>([]);
 	const [boardData, setBoardData] = useState<number[]>([]);
+	const [boardDimensions, setBoardDimensions] = useState<[number, number]>([8,8]);
 	const [turn, setTurn] = useState<Team>(Team.White);
 	const [rule, setRule] = useState<string>("");
 	const [team, setTeam] = useState<Team>(Team.NoTeam);
@@ -62,8 +63,10 @@ function Game() {
 			console.log(piece)
 		}
 		
-		let column = i + Math.floor(i/8);
-		let classname: string = column%2==0 ? "square light" : "square dark";
+		console.log()
+
+		let column = Math.floor(i/boardDimensions[0])
+		let classname: string = (i+column) % 2 == 0 ? "square light" : "square dark";
 
 		return <div className={start_pos == i || end_pos == i ? "square red" : classname} key={"board element "+i} onClick={() => manageClick(i)}>
 			{active ? <label className={color}>{pieces[piece]}</label> : <></>}
@@ -76,8 +79,8 @@ function Game() {
 		}
 		let squares: JSX.Element[] = []
 		
-		for(let i: number = 0; i < 64; i++) {
-			if(i%8 == 0 && i != 0) {
+		for(let i: number = 0; i < boardDimensions[0]*boardDimensions[1]; i++) {
+			if(i%boardDimensions[0] == 0 && i != 0) {
 				squares.push(<br key={"break "+i}/>);
 			}
 			squares.push(RenderSquare(i));
@@ -129,6 +132,7 @@ function Game() {
 			// 	return;
 			// }
 			setBoardData(fetch.game.board.pieces);
+			setBoardDimensions([fetch.game.board.width, fetch.game.board.height]);
 			setTeam(fetch.team)
 			// setWinner(fetch["winner"]);
 			setTurn(fetch.game.turn);
