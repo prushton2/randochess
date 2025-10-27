@@ -79,7 +79,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("%s\n", data)
+	// fmt.Printf("%s\n", data)
 
 	io.Writer.Write(w, data)
 }
