@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ResponseGame } from './models/ResponseGame';
 
 export async function CreateGame() {
 	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/new`;
@@ -12,10 +13,10 @@ export async function JoinGame(code: string) {
 	return response.data;
 }
 
-export async function Fetch(code: string) {
+export async function Fetch(code: string): Promise<ResponseGame> {
 	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/fetch`;
 	const response = await axios.post(url, `{"code": "${code}"}`);
-	return response.data;
+	return response.data as ResponseGame;
 }
 
 export async function Move(code: string, start_pos: number, end_pos: number) {
