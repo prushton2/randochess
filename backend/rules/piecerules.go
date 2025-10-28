@@ -6,6 +6,36 @@ import (
 	"prushton.com/randochess/v2/board"
 )
 
+func DefaultMove(self *board.Board, start int, end int) {
+	self.Pieces[end] = self.Pieces[start]
+	self.Pieces[start].SetPieceTeam(board.NoTeam)
+	self.Pieces[end].SetPieceMoved()
+}
+
+func DefaultGetWinner(self board.Board) board.Team {
+	WhiteInPlay := false
+	BlackInPlay := false
+
+	for i := range self.Width * self.Height {
+		if self.Pieces[i].GetPieceType() == board.King {
+			if self.Pieces[i].GetPieceTeam() == board.White {
+				WhiteInPlay = true
+			}
+			if self.Pieces[i].GetPieceTeam() == board.Black {
+				BlackInPlay = true
+			}
+		}
+	}
+
+	if WhiteInPlay != BlackInPlay && (WhiteInPlay || BlackInPlay) {
+		if WhiteInPlay {
+			return board.White
+		}
+		return board.Black
+	}
+	return board.NoTeam
+}
+
 func DefaultPawn(self board.Board, start int, end int) bool {
 	var delta_x int = start%self.Width - end%self.Width
 	var delta_y int = start/self.Height - end/self.Height
@@ -105,5 +135,16 @@ func PlanBishop(self board.Board, start int, end int) bool {
 		return Abs(delta_x) <= 1 && Abs(delta_y) <= 1
 	} else {
 		return Abs(delta_x) == Abs(delta_y)
+	}
+}
+
+func AtomicChessMove(self *board.Board, start int, end int) {
+	if self.Pieces[end].GetPieceTeam() == board.NoTeam {
+		self.Pieces[end] = self.Pieces[start]
+		self.Pieces[start].SetPieceTeam(board.NoTeam)
+		self.Pieces[end].SetPieceMoved()
+	} else {
+		self.Pieces[end].SetPieceTeam(board.NoTeam)
+		self.Pieces[start].SetPieceTeam(board.NoTeam)
 	}
 }

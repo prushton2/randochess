@@ -149,6 +149,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 	if !exists {
 		http.Error(w, "Code isnt valid", http.StatusBadRequest)
 		io.WriteString(w, "{}")
+		mutex.Unlock()
 		return
 	}
 
@@ -156,6 +157,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 	if !exists {
 		http.Error(w, "Player points to invalid game", http.StatusBadRequest)
 		io.WriteString(w, "{}")
+		mutex.Unlock()
 		return
 	}
 	mutex.Unlock()
@@ -200,6 +202,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	if !exists {
 		http.Error(w, "Code isnt valid", http.StatusBadRequest)
 		io.WriteString(w, "{}")
+		mutex.Unlock()
 		return
 	}
 
@@ -207,13 +210,15 @@ func move(w http.ResponseWriter, r *http.Request) {
 	if !exists {
 		http.Error(w, "Player points to invalid game", http.StatusBadRequest)
 		io.WriteString(w, "{}")
+		mutex.Unlock()
 		return
 	}
 
 	err = gameInfo.Move(parsedBody.Start, parsedBody.End)
 	if err != nil {
-		http.Error(w, "Invalid Move", http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("Invalid Move: %s", err), http.StatusBadRequest)
 		io.WriteString(w, "{}")
+		mutex.Unlock()
 		return
 	}
 

@@ -30,6 +30,7 @@ function App() {
 				<option value="Oops! All Knights!">Oops! All Knights!</option>
 				<option value="PREPARE THYSELF">PREPARE THYSELF</option>
 				<option value="Have a plan to kill everyone you meet">Have a plan to kill everyone you meet</option>
+				<option value="Atomic Chess">Atomic Chess</option>
 			</select>
 		</label>
 		<button onClick={create_game}>

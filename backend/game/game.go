@@ -63,13 +63,9 @@ func (self *Game) Move(start int, end int) error {
 	// switch turn
 	self.Turn = self.Turn.OtherTeam()
 
-	if self.Board.Pieces[end].GetPieceType() == board.King {
-		self.Winner = self.Board.Pieces[end].GetPieceTeam().OtherTeam()
-	}
+	self.Ruleset.Move(&self.Board, start, end)
 
-	self.Board.Pieces[end] = self.Board.Pieces[start]
-	self.Board.Pieces[start].SetPieceTeam(board.NoTeam)
-	self.Board.Pieces[end].SetPieceMoved()
+	self.Winner = self.Ruleset.GetWinner(self.Board)
 
 	return nil
 }
