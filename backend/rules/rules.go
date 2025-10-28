@@ -81,20 +81,20 @@ func CheckLineOfSight(self board.Board, start int, end int) bool {
 
 		// we move the x and y coordinates by n in the directions defined
 		index := start + (direction_x * n) + (direction_y * n * self.Width)
-		fmt.Printf("Index %d: ", index)
+		// fmt.Printf("Index %d: ", index)
 		// oob? just skip it
 		if index >= self.Width*self.Height || index < 0 {
-			fmt.Print("\n")
+			// fmt.Print("\n")
 			continue
 		}
-		fmt.Printf("%d-%d ", self.Pieces[index].GetPieceTeam(), self.Pieces[index].GetPieceType())
+		// fmt.Printf("%d-%d ", self.Pieces[index].GetPieceTeam(), self.Pieces[index].GetPieceType())
 
 		// at any point if we encounter a piece we lose los
 		if self.Pieces[index].GetPieceTeam() != board.NoTeam {
 			hasLOS = false
 		}
 	}
-	fmt.Print("\n")
+	// fmt.Print("\n")
 
 	return hasLOS
 }
