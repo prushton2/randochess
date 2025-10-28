@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 
 	"prushton.com/randochess/v2/board"
@@ -20,6 +21,7 @@ type CodeInfo struct {
 
 var games map[int]game.Game
 var codes map[string]CodeInfo
+var mutex sync.RWMutex
 
 type RequestCode struct {
 	Code string `json:"code"`
@@ -65,6 +67,7 @@ func new(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	mutex.Lock()
 	// gen random numbers for ids
 	exists := true
 	gameID := 0
@@ -105,6 +108,7 @@ func new(w http.ResponseWriter, r *http.Request) {
 	games[gameID] = newgame
 	codes[hostID] = host
 	codes[guestID] = guest
+	mutex.Unlock()
 
 	response := ResponseNew{
 		HostCode:  hostID,
@@ -140,6 +144,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	mutex.Lock()
 	playerInfo, exists := codes[parsedBody.Code]
 	if !exists {
 		http.Error(w, "Code isnt valid", http.StatusBadRequest)
@@ -153,6 +158,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, "{}")
 		return
 	}
+	mutex.Unlock()
 
 	var response = ResponseFetch{
 		Team: playerInfo.Team,
@@ -165,8 +171,6 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, "{}")
 		return
 	}
-
-	// fmt.Printf("%s\n", data)
 
 	io.Writer.Write(w, data)
 }
@@ -191,6 +195,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	mutex.Lock()
 	playerInfo, exists := codes[parsedBody.Code]
 	if !exists {
 		http.Error(w, "Code isnt valid", http.StatusBadRequest)
@@ -213,6 +218,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	}
 
 	games[playerInfo.GameIndex] = gameInfo
+	mutex.Unlock()
 
 	io.WriteString(w, "{\"status\": \"success\"}")
 }
@@ -228,6 +234,7 @@ func collectGarbageThread() {
 
 func collectGarbage() {
 	// fmt.Println("Collecting Garbage")
+	mutex.Lock()
 	for k, v := range games {
 		if time.Now().Unix() > v.LastRequestedAt+600 {
 			// fmt.Printf("Deleted game id %d\n", k)
@@ -242,6 +249,7 @@ func collectGarbage() {
 			delete(codes, k)
 		}
 	}
+	mutex.Unlock()
 }
 
 func main() {

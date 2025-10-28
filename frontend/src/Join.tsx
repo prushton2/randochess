@@ -29,6 +29,7 @@ function App() {
 				<option value="Open World">Open World</option>
 				<option value="Oops! All Knights!">Oops! All Knights!</option>
 				<option value="PREPARE THYSELF">PREPARE THYSELF</option>
+				<option value="Have a plan to kill everyone you meet">Have a plan to kill everyone you meet</option>
 			</select>
 		</label>
 		<button onClick={create_game}>

@@ -55,17 +55,17 @@ var allRulesets map[string]Ruleset = map[string]Ruleset{
 		Width:  8,
 		Height: 8,
 	},
-	// "Have a plan to kill everyone you meet": {
-	// 	Name: "Have a plan to kill everyone you meet",
-	// 	PieceRules: map[board.PieceType]func(board.Board, int, int) bool{
-	// 		board.Pawn:   DefaultPawn,
-	// 		board.Rook:   DefaultRook,
-	// 		board.Knight: DefaultKnight,
-	// 		board.Bishop: DefaultBishop,
-	// 		board.King:   DefaultKing,
-	// 		board.Queen:  DefaultQueen,
-	// 	},
-	// 	Width:  8,
-	// 	Height: 8,
-	// },
+	"Have a plan to kill everyone you meet": {
+		Name: "Have a plan to kill everyone you meet",
+		PieceRules: map[board.PieceType]func(board.Board, int, int) bool{
+			board.Pawn:   DefaultPawn,
+			board.Rook:   DefaultRook,
+			board.Knight: DefaultKnight,
+			board.Bishop: PlanBishop,
+			board.King:   DefaultKing,
+			board.Queen:  DefaultQueen,
+		},
+		Width:  8,
+		Height: 8,
+	},
 }
