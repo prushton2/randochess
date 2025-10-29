@@ -108,4 +108,5 @@ var AllRulesets map[string]Ruleset = map[string]Ruleset{
 		Move:      DefaultMove,
 		GetWinner: DefaultGetWinner,
 	},
+	// "Schizophrenia"
 }

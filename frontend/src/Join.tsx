@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {CreateGame, FetchRulesets} from "./axios.ts"
-import './App.css'
+import './Join.css'
 
 
 
@@ -50,25 +50,34 @@ function App() {
 	}, [])
 
 	return (
-	<b>
-		<label>
-			Select a Ruleset: <br />
-			<select name="ruleset" id="ruleset" onChange={(e) => setRuleset(e.target.value)}>
-				{rulesets}
-			</select>
-		</label>
-		<button onClick={create_game}>
-			Create Game
-		</button>
-		<br/><br/>
-		or
-		<br/><br/>
-		<input type="number" onChange={(e) => {setCode(e.target.value)}}/>
+	<div className='joinContainer'>
 
-		<button onClick={join_game}>
-			Join
-		</button>
-	</b>
+		<div className='createGame'>
+
+			<div className='selectGamerule'>
+				<h3>Select a Ruleset:</h3> <br />
+				<select name="ruleset" id="ruleset" onChange={(e) => setRuleset(e.target.value)}>
+					{rulesets}
+				</select>
+			</div>
+
+			<button onClick={create_game} className="createGameButton">
+				Create Game
+			</button>
+
+		</div>
+		
+		<b>or</b>
+
+		<div className='joinGame'>
+		
+			<input placeholder="Enter a join code" type="number" onChange={(e) => {setCode(e.target.value)}} className='joinGameTextbox'/>
+			<button onClick={join_game} className='joinGameButton'>
+				Join
+			</button>
+		
+		</div>
+	</div>
 	)
 }
 

@@ -1,0 +1,41 @@
+.joinContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.createGame {
+    display: flex;
+    flex-direction: row;
+    margin: 40px;
+    align-items: center;
+}
+
+.createGameButton {
+    height: 50px;
+    margin: 0px;
+    margin-left: 20px;
+}
+
+.selectGamerule {
+    display: flex;
+    flex-direction: column;
+}
+
+.joinGame {
+    display: flex;
+    flex-direction: row;
+    margin: 40px;
+    /* vertical-align: middle; */
+}
+
+.joinGameTextbox {
+    height: 50px;
+    margin: 0px;
+}
+
+.joinGameButton {
+    height: 50px;
+    margin: 0px;
+    margin-left: 20px;
+}
