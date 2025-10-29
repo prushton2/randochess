@@ -19,6 +19,7 @@ function Game() {
 
 	let [query] = useSearchParams();
 	let pieces: string[] = ["", "", "", "", "", ""];
+	let pieceNames: string[] = ["pawn", "rook", "knight", "bishop", "queen", "king"]
 	
 	function manageClick(number: number) {
 		if(team == Team.NoTeam) {
@@ -67,7 +68,7 @@ function Game() {
 		let classname: string = (i+column) % 2 == 0 ? "square light" : "square dark";
 
 		return <div className={start_pos == i || end_pos == i ? "square red" : classname} key={"board element "+i} onClick={() => {if (winner == Team.NoTeam) {manageClick(i)} }}>
-			{active ? <label className={color}>{pieces[piece]}</label> : <></>}
+			{active ? <label className={`${color} ${pieceNames[piece]}`}>{pieces[piece]}</label> : <></>}
 		</div>
 	}
 
@@ -155,8 +156,8 @@ function Game() {
 		{chessBoard}
 		<div className="alignBottom">
 			<button className="bottomElement red" onClick={() => {leaveGame()}}>Leave</button>
-			<label className="bottomElement">Join Code: {localStorage.getItem("guest_code")}</label>
-			<label className="bottomElement">Rule: {rule}</label>
+			<label className="bottomElement grey">Join Code: {localStorage.getItem("guest_code")}</label>
+			<label className="bottomElement grey">Rule: {rule}</label>
 		</div>
 	</b>
 	)

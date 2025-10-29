@@ -33,7 +33,7 @@ button {
 	background: #990000;
 }
 .grey {
-	background: #555555;
+	background: #333;
 }
 
 .blacktext {
@@ -46,6 +46,30 @@ button {
 	color: grey;
 }
 
+.pawn {
+	margin-right: 0px;
+}
+
+.rook {
+	margin-right: 0px;
+}
+
+.knight {
+	margin-right: 10px;
+}
+
+.bishop {
+	margin-right: 0px;
+}
+
+.queen {
+	margin-right: 13px;
+}
+
+.king {
+	margin-right: 7px;
+}
+
 .alignBottom {
 	position: absolute;
 	bottom: 0px;
@@ -55,10 +79,10 @@ button {
 
 .bottomElement {
 	padding-left: 10px;
-}
-
-.winnerlabel {
-	
+	padding: 10px;
+	border-radius: 5px;
+	margin: 5px;
+	height: auto;
 }
 
 @font-face {

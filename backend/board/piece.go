@@ -23,9 +23,10 @@ const ( // 2 bits
 type Piece uint8
 
 // 000 00 000
-//      |   |
-//      |   PieceType
-//      Team
+//   |  |   |
+//   |  |   PieceType
+//   |  Team
+//   hasMoved
 
 func (p Piece) MarshalJSON() ([]byte, error) {
 	return json.Marshal(uint8(p))
