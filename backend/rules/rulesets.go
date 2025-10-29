@@ -93,4 +93,19 @@ var allRulesets map[string]Ruleset = map[string]Ruleset{
 		Move:      AtomicChessMove,
 		GetWinner: DefaultGetWinner,
 	},
+	"Knook": {
+		Name: "Knook",
+		PieceRules: map[board.PieceType]func(board.Board, int, int) bool{
+			board.Pawn:   DefaultPawn,
+			board.Rook:   Knook,
+			board.Knight: DefaultKnight,
+			board.Bishop: DefaultBishop,
+			board.King:   DefaultKing,
+			board.Queen:  DefaultQueen,
+		},
+		Width:     8,
+		Height:    8,
+		Move:      DefaultMove,
+		GetWinner: DefaultGetWinner,
+	},
 }

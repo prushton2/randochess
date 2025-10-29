@@ -126,6 +126,10 @@ func PrepareThyselfPawn(self board.Board, start int, end int) bool {
 
 }
 
+func Knook(self board.Board, start int, end int) bool {
+	return DefaultKnight(self, start, end) || DefaultRook(self, start, end)
+}
+
 func PlanBishop(self board.Board, start int, end int) bool {
 	var delta_x int = start%self.Width - end%self.Width
 	var delta_y int = start/self.Height - end/self.Height
