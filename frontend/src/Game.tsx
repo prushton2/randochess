@@ -134,7 +134,7 @@ function Game() {
 			}
 			let [fetch, error] = await Fetch(code)
 			if (error != "") {
-				alert("Invalid Game Code")
+				alert(`Error joining game: ${error}`)
 				window.location.href = "/"
 			}
 

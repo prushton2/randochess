@@ -60,7 +60,7 @@ func new(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Error reading request body (is this a post request?)", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		return
 	}
 
@@ -68,7 +68,7 @@ func new(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &parsedBody)
 	if err != nil {
 		http.Error(w, "Body is not valid JSON", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		return
 	}
 
@@ -123,7 +123,7 @@ func new(w http.ResponseWriter, r *http.Request) {
 	bytes, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, "invalid json", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		return
 	}
 	io.Writer.Write(w, bytes)
@@ -137,7 +137,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Error reading request body (is this a post request?)", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		return
 	}
 
@@ -145,7 +145,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &parsedBody)
 	if err != nil {
 		http.Error(w, "Body is not valid JSON", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		return
 	}
 
@@ -153,7 +153,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 	playerInfo, exists := codes[parsedBody.Code]
 	if !exists {
 		http.Error(w, "Code isnt valid", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		mutex.Unlock()
 		return
 	}
@@ -161,7 +161,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 	gameInfo, exists := games[playerInfo.GameIndex]
 	if !exists {
 		http.Error(w, "Player points to invalid game", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		mutex.Unlock()
 		return
 	}
@@ -175,7 +175,7 @@ func fetch(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, "Failed to serialize JSON", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		return
 	}
 
@@ -190,7 +190,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Error reading request body (is this a post request?)", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		return
 	}
 
@@ -198,7 +198,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &parsedBody)
 	if err != nil {
 		http.Error(w, "Body is not valid JSON", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		return
 	}
 
@@ -206,7 +206,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	playerInfo, exists := codes[parsedBody.Code]
 	if !exists {
 		http.Error(w, "Code isnt valid", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		mutex.Unlock()
 		return
 	}
@@ -214,7 +214,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	gameInfo, exists := games[playerInfo.GameIndex]
 	if !exists {
 		http.Error(w, "Player points to invalid game", http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		mutex.Unlock()
 		return
 	}
@@ -222,7 +222,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	err = gameInfo.Move(parsedBody.Start, parsedBody.End)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Invalid Move: %s", err), http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		mutex.Unlock()
 		return
 	}
@@ -249,7 +249,7 @@ func fetchRulesets(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Invalid Json: %s", err), http.StatusBadRequest)
-		io.WriteString(w, "{}")
+		io.WriteString(w, "")
 		return
 	}
 
