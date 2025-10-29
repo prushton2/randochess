@@ -22,6 +22,9 @@ function App() {
 
 	async function get_rulesets(): Promise<JSX.Element[]> {
 		let rulesets = await FetchRulesets()
+
+		rulesets.rulesets = rulesets.rulesets.sort()
+
 		rulesets.rulesets = ["Random"].concat(rulesets.rulesets)
 
 		let html: JSX.Element[] = []
