@@ -132,7 +132,11 @@ function Game() {
 			if(code == null) {
 				code = "";
 			}
-			let fetch = await Fetch(code)
+			let [fetch, error] = await Fetch(code)
+			if (error != "") {
+				alert("Invalid Game Code")
+				window.location.href = "/"
+			}
 
 			setBoardData(fetch.game.board.pieces);
 			setBoardDimensions([fetch.game.board.width, fetch.game.board.height]);

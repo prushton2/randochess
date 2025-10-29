@@ -73,7 +73,7 @@ function App() {
 		
 			<input placeholder="Enter a join code" type="number" onChange={(e) => {setCode(e.target.value)}} className='joinGameTextbox'/>
 			<button onClick={join_game} className='joinGameButton'>
-				Join
+				Join Game
 			</button>
 		
 		</div>

@@ -9,6 +9,16 @@
     flex-direction: row;
     margin: 40px;
     align-items: center;
+    justify-content: center;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 15px;
+    width: 100%;
+
+}
+
+h3 {
+    margin: 3px;
 }
 
 .createGameButton {
@@ -25,13 +35,31 @@
 .joinGame {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
     margin: 40px;
-    /* vertical-align: middle; */
+    background-color: #333;
+    padding: 10px;
+    border-radius: 15px;
+    width: 100%;
+
 }
 
 .joinGameTextbox {
     height: 50px;
     margin: 0px;
+    font-size: large;
+    text-align: center;
+}
+
+.joinGameTextbox[type=number]::-webkit-inner-spin-button, 
+.joinGameTextbox[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.joinGameTextbox[type=number] {
+  -moz-appearance: textfield;
 }
 
 .joinGameButton {
@@ -39,4 +67,3 @@
     margin: 0px;
     margin-left: 20px;
 }
-

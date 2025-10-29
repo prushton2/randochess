@@ -10,10 +10,15 @@ export async function CreateGame(ruleName: string): Promise<NewGameResponse> {
 	return response.data as NewGameResponse;
 }
 
-export async function Fetch(code: string): Promise<ResponseGame> {
+export async function Fetch(code: string): Promise<[ResponseGame, string]> {
 	const url = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/game/fetch`;
-	const response = await axios.post(url, `{"code": "${code}"}`);
-	return response.data as ResponseGame;
+	const response = await axios.post(url, `{"code": "${code}"}`, {validateStatus: (_) => {return true}});
+
+	if (response.status != 200) {
+		return [{} as ResponseGame, "Invalid Code"]
+	}
+
+	return [response.data as ResponseGame, ""];
 }
 
 export async function Move(code: string, start_pos: number, end_pos: number): Promise<Status> {
