@@ -12,6 +12,7 @@ import (
 
 	"prushton.com/randochess/v2/board"
 	"prushton.com/randochess/v2/game"
+	"prushton.com/randochess/v2/rules"
 )
 
 type CodeInfo struct {
@@ -45,6 +46,10 @@ type RequestNew struct {
 type ResponseNew struct {
 	HostCode  string `json:"hostCode"`
 	GuestCode string `json:"guestCode"`
+}
+
+type ResponseFetchRuleset struct {
+	Rulesets []string `json:"rulesets"`
 }
 
 func new(w http.ResponseWriter, r *http.Request) {
@@ -228,6 +233,29 @@ func move(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "{\"status\": \"success\"}")
 }
 
+func fetchRulesets(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Request-Method", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+
+	response := ResponseFetchRuleset{
+		Rulesets: make([]string, 0, len(rules.AllRulesets)),
+	}
+
+	for k := range rules.AllRulesets {
+		response.Rulesets = append(response.Rulesets, k)
+	}
+
+	data, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Invalid Json: %s", err), http.StatusBadRequest)
+		io.WriteString(w, "{}")
+		return
+	}
+
+	io.Writer.Write(w, data)
+}
+
 func collectGarbageThread() {
 	for {
 		if time.Now().Unix()%300 == 0 {
@@ -262,15 +290,16 @@ func main() {
 	games = make(map[int]game.Game)
 	codes = make(map[string]CodeInfo)
 
-	games[0], _ = game.New("Open World")
-	codes["0"] = CodeInfo{GameIndex: 0, Team: board.White}
-	codes["1"] = CodeInfo{GameIndex: 0, Team: board.Black}
+	// games[0], _ = game.New("Open World")
+	// codes["0"] = CodeInfo{GameIndex: 0, Team: board.White}
+	// codes["1"] = CodeInfo{GameIndex: 0, Team: board.Black}
 
 	go collectGarbageThread()
 
 	http.HandleFunc("/game/new", new)
 	http.HandleFunc("/game/fetch", fetch)
 	http.HandleFunc("/game/move", move)
+	http.HandleFunc("/info/rulesets", fetchRulesets)
 
 	fmt.Println("Starting server on :3000")
 	if err := http.ListenAndServe(":3000", nil); err != nil {

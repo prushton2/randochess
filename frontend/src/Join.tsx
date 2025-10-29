@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import {CreateGame} from "./axios.ts"
+import { useEffect, useState } from 'react'
+import {CreateGame, FetchRulesets} from "./axios.ts"
 import './App.css'
 
 
@@ -8,6 +8,7 @@ function App() {
 	
 	const [code, setCode] = useState("");
 	const [ruleset, setRuleset] = useState("Random");
+	const [rulesets, setRulesets] = useState<JSX.Element[]>([])
 	
 	async function create_game() {
 		let codes = await CreateGame(ruleset);
@@ -19,19 +20,38 @@ function App() {
 		window.location.href = `/play?code=${code}`;
 	}
 
+	async function get_rulesets(): Promise<JSX.Element[]> {
+		let rulesets = await FetchRulesets()
+		rulesets.rulesets = ["Random"].concat(rulesets.rulesets)
+
+		let html: JSX.Element[] = []
+
+		rulesets.rulesets.forEach(element => {
+			if (element == "Default") {
+				html = [html[0], <option value={element}>{element}</option>].concat(html.slice(1))
+				return
+			}
+			html.push(
+				<option value={element}>{element}</option>
+			)
+		});
+
+		return html
+	}
+
+	useEffect(() => {
+		async function init() {
+			setRulesets(await get_rulesets())
+		}
+		init()
+	}, [])
+
 	return (
 	<b>
 		<label>
 			Select a Ruleset: <br />
 			<select name="ruleset" id="ruleset" onChange={(e) => setRuleset(e.target.value)}>
-				<option value="Random">Random</option>
-				<option value="Default">Default</option>
-				<option value="Open World">Open World</option>
-				<option value="Oops! All Knights!">Oops! All Knights!</option>
-				<option value="PREPARE THYSELF">PREPARE THYSELF</option>
-				<option value="Have a plan to kill everyone you meet">Have a plan to kill everyone you meet</option>
-				<option value="Atomic Chess">Atomic Chess</option>
-				<option value="Knook">Knook</option>
+				{rulesets}
 			</select>
 		</label>
 		<button onClick={create_game}>

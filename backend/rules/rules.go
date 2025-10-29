@@ -27,15 +27,15 @@ func (self Ruleset) MarshalJSON() ([]byte, error) {
 
 func SelectRuleset(name string) (Ruleset, error) {
 	if name == "Random" {
-		keys := make([]string, 0, len(allRulesets))
-		for k := range allRulesets {
+		keys := make([]string, 0, len(AllRulesets))
+		for k := range AllRulesets {
 			keys = append(keys, k)
 		}
 		randomKey := keys[rand.Intn(len(keys))]
-		return allRulesets[randomKey], nil
+		return AllRulesets[randomKey], nil
 	}
 
-	ruleset, exists := allRulesets[name]
+	ruleset, exists := AllRulesets[name]
 	if !exists {
 		return Ruleset{}, fmt.Errorf("Invalid name")
 	}

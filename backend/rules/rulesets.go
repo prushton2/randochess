@@ -2,7 +2,7 @@ package rules
 
 import "prushton.com/randochess/v2/board"
 
-var allRulesets map[string]Ruleset = map[string]Ruleset{
+var AllRulesets map[string]Ruleset = map[string]Ruleset{
 	"Default": {
 		Name: "Default",
 		PieceRules: map[board.PieceType]func(board.Board, int, int) bool{
