@@ -108,5 +108,19 @@ var AllRulesets map[string]Ruleset = map[string]Ruleset{
 		Move:      DefaultMove,
 		GetWinner: DefaultGetWinner,
 	},
-	// "Schizophrenia"
+	"Dementia": {
+		Name: "Dementia",
+		PieceRules: map[board.PieceType]func(board.Board, int, int) bool{
+			board.Pawn:   DefaultPawn,
+			board.Rook:   DefaultRook,
+			board.Knight: DefaultKnight,
+			board.Bishop: DefaultBishop,
+			board.King:   DefaultKing,
+			board.Queen:  DefaultQueen,
+		},
+		Width:     8,
+		Height:    8,
+		Move:      DementiaMove,
+		GetWinner: DefaultGetWinner,
+	},
 }
