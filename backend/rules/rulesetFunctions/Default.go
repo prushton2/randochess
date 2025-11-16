@@ -123,17 +123,9 @@ func DefaultBishop(self board.Board, start int, end int) ([]int, []int) {
 }
 
 func DefaultKing(self board.Board, start int, end int) ([]int, []int) {
-	var moveLocations [8][2]int = [8][2]int{{1, 1}, {0, 1}, {-1, 1}, {1, 0}, {-1, 0}, {1, -1}, {0, -1}, {-1, -1}}
-	var validMoveLocations []int = make([]int, 0)
+	var offsets [][2]int = [][2]int{{1, 1}, {0, 1}, {-1, 1}, {1, 0}, {-1, 0}, {1, -1}, {0, -1}, {-1, -1}}
 
-	for _, location := range moveLocations {
-		var destination = start + location[0] + location[1]*self.Width
-		if destination >= self.Width*self.Height || destination < 0 {
-			continue
-		}
-
-		validMoveLocations = append(validMoveLocations, destination)
-	}
+	var validMoveLocations []int = GetMoveLocationsFromOffset(self, start, end, offsets)
 
 	return validMoveLocations, validMoveLocations
 }

@@ -29,6 +29,68 @@ func compareExpectedOut(t *testing.T, calculatedMove []int, calculatedTake []int
 	}
 }
 
+func TestPawn_Move(t *testing.T) {
+	// This is testing all of the move functionality
+
+	brd := board.New(8, 8)
+	brd.Pieces[43].SetPieceType(board.Pawn)
+
+	// White side no move
+	brd.Pieces[43].SetPieceTeam(board.White)
+	var move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+
+	compareExpectedOut(t, move, take, []int{27, 35}, []int{})
+
+	// Black side no move
+	brd.Pieces[43].SetPieceTeam(board.Black)
+
+	move, take = DefaultPawn(brd, 43, -1)
+
+	compareExpectedOut(t, move, take, []int{51, 59}, []int{})
+
+	// White side moved
+	brd.Pieces[43].SetPieceMoved()
+	brd.Pieces[43].SetPieceTeam(board.White)
+	move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+
+	compareExpectedOut(t, move, take, []int{35}, []int{})
+
+	// Black side moved
+	brd.Pieces[43].SetPieceTeam(board.Black)
+	move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+
+	compareExpectedOut(t, move, take, []int{51}, []int{})
+}
+
+func TestPawn_Take(t *testing.T) {
+	brd := board.New(8, 8)
+	brd.Pieces[43].SetPieceType(board.Pawn)
+
+	brd.Pieces[52].SetPieceType(board.Pawn)
+	brd.Pieces[52].SetPieceTeam(board.White)
+
+	brd.Pieces[50].SetPieceType(board.Pawn)
+	brd.Pieces[50].SetPieceTeam(board.White)
+
+	brd.Pieces[34].SetPieceType(board.Pawn)
+	brd.Pieces[34].SetPieceTeam(board.Black)
+
+	brd.Pieces[36].SetPieceType(board.Pawn)
+	brd.Pieces[36].SetPieceTeam(board.Black)
+
+	// White piece taking
+	brd.Pieces[43].SetPieceTeam(board.White)
+	var move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+
+	compareExpectedOut(t, move, take, []int{35, 27}, []int{36, 34})
+
+	// Black piece taking
+	brd.Pieces[43].SetPieceTeam(board.Black)
+	move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+
+	compareExpectedOut(t, move, take, []int{51, 59}, []int{52, 50})
+}
+
 func TestKnight(t *testing.T) {
 	var expected_out []int = []int{1, 3, 8, 12, 24, 28, 33, 35}
 
