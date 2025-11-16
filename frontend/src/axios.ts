@@ -3,12 +3,13 @@ import { ResponseGame } from './models/ResponseGame';
 import { Status } from './models/Status';
 import NewGameResponse from './models/NewGameResponse';
 import { ResponseRulesets } from './models/ResponseRulesets';
+import Team from './models/Team';
 
 const backend_url: string = import.meta.env.VITE_REACT_APP_BACKEND_URL.endsWith("/") ? (import.meta.env.VITE_REACT_APP_BACKEND_URL as string).slice(0, -1) : import.meta.env.VITE_REACT_APP_BACKEND_URL
 
-export async function CreateGame(ruleName: string): Promise<NewGameResponse> {
+export async function CreateGame(ruleName: string, team: Team): Promise<NewGameResponse> {
 	const url = `${backend_url}/game/new`;
-	const response = await axios.post(url, `{"ruleName": "${ruleName}", "team": 2}`);
+	const response = await axios.post(url, `{"ruleName": "${ruleName}", "team": ${team}}`);
 	return response.data as NewGameResponse;
 }
 

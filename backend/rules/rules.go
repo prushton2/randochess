@@ -40,7 +40,7 @@ func SelectRuleset(name string) (Ruleset, error) {
 
 	ruleset, exists := AllRulesets[name]
 	if !exists {
-		return Ruleset{}, fmt.Errorf("Invalid name")
+		return Ruleset{}, fmt.Errorf("invalid name")
 	}
 
 	return ruleset, nil

@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react'
 import { CreateGame, FetchRulesets } from "./axios.ts"
 import './Join.css'
-
-
+import './utils/color.ts'
+import complementaryHsl from './utils/color.ts';
+import Team from './models/Team.ts';
+//TODO add enter key functionality to join stuff again?
 
 function App() {
 
-	const [code, setCode] = useState("");
+	const [code, setCode] = useState<string>("");
 	const [ruleset, setRuleset] = useState("Random");
 	const [rulesets, setRulesets] = useState<JSX.Element[]>([])
+	const [rulesetDescriptions, setRulesetDescriptions] = useState<Record<string, string>>({})
+	const [team, setTeam] = useState<Team>(Team.Black)
 
 	// per-character inline styles for the header text
 	const [charStyles, setCharStyles] = useState<React.CSSProperties[]>([])
@@ -22,7 +26,7 @@ function App() {
 	function generateStyle(): React.CSSProperties {
 		const pick = Math.random()
 		const color = randomColor()
-		const textShadowColor = randomColor()
+		const textShadowColor = complementaryHsl(color)
 		const rotate = (Math.random() - 0.5) * 20 // -10deg to 10deg // decreasing range to avoid char overlap
 		const translateY = (Math.random() - 0.5) * 8 // -4px to 4px
 
@@ -49,7 +53,7 @@ function App() {
 			case pick < 0.7:
 				return {
 					color,
-					textShadow: `0 0 6px ${textShadowColor}, 0 0 12px ${textShadowColor}`,
+					textShadow: `0 0 4px ${textShadowColor}, 0 0 12px ${textShadowColor}`,
 					transform: `translateY(${translateY}px)`,
 				}
 			// subtle color change
@@ -61,6 +65,15 @@ function App() {
 		}
 	}
 
+	function changeTeam() {
+		if (team == Team.White) {
+			setTeam(Team.Black)
+
+		} else {
+			setTeam(Team.White)
+		}
+	}
+
 	useEffect(() => {
 		// generate a random style per character on mount
 		const styles: React.CSSProperties[] = HEADER_TEXT.split("").map(() => generateStyle());
@@ -69,7 +82,7 @@ function App() {
 	}, [])
 
 	async function create_game() {
-		let codes = await CreateGame(ruleset);
+		let codes = await CreateGame(ruleset, team);
 		console.log(codes);
 		localStorage.setItem("guest_code", codes.guestCode);
 		window.location.href = `/play?code=${codes.hostCode}`;
@@ -85,6 +98,15 @@ function App() {
 		// Extract names and sort them
 		const names = rulesResponse.rulesets.map(r => r.name).sort((a, b) => a.localeCompare(b))
 
+		// build description map
+		const descMap: Record<string, string> = {}
+		rulesResponse.rulesets.forEach((r: any) => {
+			descMap[r.name] = r.description || ''
+		})
+		// provide a default description for Random
+		descMap['Random'] = descMap['Random'] || 'Creates a game using a randomly selected ruleset.'
+		setRulesetDescriptions(descMap)
+
 		// Put Random first
 		names.unshift("Random")
 
@@ -98,6 +120,8 @@ function App() {
 
 		return html
 	}
+
+
 
 	useEffect(() => {
 		async function init() {
@@ -124,23 +148,33 @@ function App() {
 				<div className='createGame'>
 
 					<div className='selectGamerule'>
-						<h2>Select a Ruleset:</h2> <br />
+						<label htmlFor="ruleset" className="rulesetLabel">Select a Ruleset:</label>
+						<br />
 						<select name="ruleset" id="ruleset" onChange={(e) => setRuleset(e.target.value)}>
 							{rulesets}
 						</select>
+
+						{/* dynamic description for selected ruleset */}
+						<div className='rulesetDescription' aria-live="polite">
+							{rulesetDescriptions[ruleset] || (ruleset === 'Random' ? 'Creates a game using a randomly selected ruleset.' : 'No description available.')}
+						</div>
+
+						<div className='buttonColumn'>
+							<button onClick={create_game} className="createGameButton" type="button" aria-label="Create Game">
+								<span>Create Game</span>
+							</button>
+							<button onClick={changeTeam} className={team == Team.White ? "changeTeamButtonWhite" : "changeTeamButtonBlack"}>
+								<span>Toggle Team</span>
+							</button>
+						</div>
 					</div>
 
-					<button onClick={create_game} className="createGameButton">
-						<p>Create Game</p>
-					</button>
 
 				</div>
 
-				<b>or</b>
 
 				<div className='joinGame'>
-
-					<input placeholder="Enter a join code" type="number" onChange={(e) => { setCode(e.target.value) }} className='joinGameTextbox' />
+					<input placeholder="Or enter a join code" type="number" onChange={(e) => { setCode(e.target.value) }} className='joinGameTextbox' />
 					<button onClick={join_game} className='joinGameButton'>
 						Join Game
 					</button>

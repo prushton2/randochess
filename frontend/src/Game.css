@@ -1,13 +1,14 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 2rem;
+	text-align: center;
 }
 
 input {
 	height: 50px;
 }
+
 button {
 	height: 50px;
 }
@@ -26,12 +27,15 @@ button {
 .light {
 	background: #D69161;
 }
+
 .dark {
 	background: #513019;
 }
+
 .red {
 	background: #990000;
 }
+
 .grey {
 	background: #333;
 }
@@ -39,9 +43,11 @@ button {
 .blacktext {
 	color: black;
 }
+
 .whitetext {
 	color: white;
 }
+
 .greytext {
 	color: grey;
 }
@@ -86,6 +92,6 @@ button {
 }
 
 @font-face {
-    font-family: "Custom Font";
-    src: url("/resources/3270NerdFont-Regular.ttf") format("truetype");
+	font-family: "Custom Font";
+	src: url("/resources/3270NerdFont-Regular.ttf") format("truetype");
 }
