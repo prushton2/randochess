@@ -60,6 +60,66 @@ func CheckLineOfSight(self board.Board, start int, end int) bool {
 	return hasLOS
 }
 
+// directions is an array of directions to check. A directions looks like {1, 0} or {-1, 1} where index 0 is the x and index 1 is the y, determining how to move along each axis.
+// This function will, for each direction, search until it hits the edge of the board or loses line of sight (if enabled). all board positions that are valid are returned.
+func GetMoveLocationsFromDirections(self board.Board, start int, end int, directions [][2]int, checkLOS bool) []int {
+	var validMoveLocations []int = make([]int, 0)
+	// construct an array of spaces where the piece can move.
+	// Iterate over every direction and look until we reach the edge of the board or a piece
+	for _, direction := range directions {
+		var distance int = 1
+		var last_destination = start
+		var destination = start
+
+		for {
+			last_destination = destination
+			destination = start + direction[0]*distance + direction[1]*self.Width*distance
+
+			// oob? exit
+			if destination >= self.Width*self.Height || destination < 0 {
+				break
+			}
+
+			var delta_x int = destination%self.Width - last_destination%self.Width
+			var delta_y int = destination/self.Height - last_destination/self.Height
+
+			// this condition is true if we are not on the first iteration and a few things happen:
+			//    we overflow from one row to the next
+			//    we overflow from one column to the next (idk how this would happen tbh)
+			// if either is true, we stop crawling forward
+			if (delta_x != direction[0] || delta_y != direction[1]) && destination != last_destination {
+				break
+			}
+
+			if CheckLineOfSight(self, start, destination) {
+				validMoveLocations = append(validMoveLocations, destination)
+			} else {
+				break
+			}
+
+			distance += 1
+		}
+	}
+	return validMoveLocations
+}
+
+// offsets is an array like directions, but contains offsets from the current piece's position. ie {2, 1}, {1, -2}. It returns all spaces that are inbounds. LOS checking is not possible here
+// because LOS checking only works on cardinal and diagonal directions, not directions where movement is different and nonzero in each direction
+func GetMoveLocationsFromOffset(self board.Board, start int, end int, offsets [][2]int) []int {
+	var validMoveLocations []int = make([]int, 0)
+
+	for _, location := range offsets {
+		var destination = start + location[0] + location[1]*self.Width
+		if destination >= self.Width*self.Height || destination < 0 {
+			continue
+		}
+
+		validMoveLocations = append(validMoveLocations, destination)
+	}
+
+	return validMoveLocations
+}
+
 func Max(a int, b int) int {
 	if a > b {
 		return a

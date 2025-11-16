@@ -99,72 +99,24 @@ func DefaultPawn(self board.Board, start int, end int) ([]int, []int) {
 }
 
 func DefaultRook(self board.Board, start int, end int) ([]int, []int) {
-	var validMoveLocations []int = make([]int, 0)
-	var directions [4][2]int = [4][2]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
+	var directions [][2]int = [][2]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
 
-	// construct an array of spaces where the piece can move.
-	// Iterate over every direction and look until we reach the edge of the board or a piece
-	for _, direction := range directions {
-		var distance int = 1
-		var reachedLimit bool = false
-
-		for !reachedLimit {
-
-			destination := start + direction[0]*distance + direction[1]*self.Width*distance
-
-			if CheckLineOfSight(self, start, destination) {
-				validMoveLocations = append(validMoveLocations, destination)
-			} else {
-				reachedLimit = true
-			}
-
-			distance += 1
-		}
-	}
-
+	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, end, directions, true)
 	// most pieces can take at the same spots they can move to, so i just return them both
 	return validMoveLocations, validMoveLocations
 }
 
 func DefaultKnight(self board.Board, start int, end int) ([]int, []int) {
-	var moveLocations [8][2]int = [8][2]int{{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}}
-	var validMoveLocations []int = make([]int, 0)
-
-	for _, location := range moveLocations {
-		var destination = start + location[0] + location[1]*self.Width
-		if destination >= self.Width*self.Height || destination < 0 {
-			continue
-		}
-
-		validMoveLocations = append(validMoveLocations, destination)
-	}
+	var moveLocations [][2]int = [][2]int{{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}}
+	var validMoveLocations []int = GetMoveLocationsFromOffset(self, start, end, moveLocations)
 
 	return validMoveLocations, validMoveLocations
 }
 
 func DefaultBishop(self board.Board, start int, end int) ([]int, []int) {
-	var validMoveLocations []int = make([]int, 0)
-	var directions [4][2]int = [4][2]int{{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
+	var directions [][2]int = [][2]int{{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
 
-	// construct an array of spaces where the piece can move.
-	// Iterate over every direction and look until we reach the edge of the board or a piece
-	for _, direction := range directions {
-		var distance int = 1
-		var reachedLimit bool = false
-
-		for !reachedLimit {
-
-			destination := start + direction[0]*distance + direction[1]*self.Width*distance
-
-			if CheckLineOfSight(self, start, destination) {
-				validMoveLocations = append(validMoveLocations, destination)
-			} else {
-				reachedLimit = true
-			}
-
-			distance += 1
-		}
-	}
+	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, end, directions, true)
 
 	// most pieces can take at the same spots they can move to, so i just return them both
 	return validMoveLocations, validMoveLocations
