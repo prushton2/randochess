@@ -74,42 +74,57 @@ func CheckersMove(self *board.Board, start int, end int, team board.Team) board.
 	return team.OtherTeam()
 }
 
-func CheckersPawn(self board.Board, start int, end int) bool {
-	var delta_y int = start/self.Height - end/self.Height
+func CheckersPawn(self board.Board, start int, end int) ([]int, []int) {
+	var directions [][2]int = [][2]int{{1, 1}, {-1, 1}} // by default this is the directions black pieces can mmove in
 
-	if delta_y < 0 && self.Pieces[start].GetPieceTeam() == board.White {
-		return false
+	// if white team, swap it so its (1, -1), (-1, -1)
+	if self.Pieces[start].GetPieceTeam() == board.White {
+		directions[0][1] *= -1
+		directions[1][1] *= -1
 	}
 
-	if delta_y > 0 && self.Pieces[start].GetPieceTeam() == board.Black {
-		return false
-	}
+	var validMoveLocations = CheckersCrawl(self, start, directions)
 
-	return CheckersKing(self, start, end)
+	return validMoveLocations, validMoveLocations
 }
 
-func CheckersKing(self board.Board, start int, end int) bool {
-	var delta_x int = start%self.Width - end%self.Width
-	var delta_y int = start/self.Height - end/self.Height
-	var starting_piece board.Piece = self.Pieces[start]
+func CheckersKing(self board.Board, start int, end int) ([]int, []int) {
 
-	if Abs(delta_x) != Abs(delta_y) {
-		return false
+	var directions [][2]int = [][2]int{{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
+
+	var validMoveLocations = CheckersCrawl(self, start, directions)
+
+	return validMoveLocations, validMoveLocations
+}
+
+func CheckersCrawlInDirection(self board.Board, start int, direction [2]int) []int {
+	var destination = start + (direction[0] + direction[1]*self.Width)
+	if destination >= self.Width*self.Height || destination < 0 {
+		return []int{}
 	}
 
-	if Abs(delta_y) == 1 {
-		return true
+	if self.Pieces[destination].GetPieceTeam() == board.NoTeam {
+		return []int{destination}
 	}
 
-	if Abs(delta_y) == 2 { // we are hopping over a piece
-		// negative for some reason
-		hopped_piece_x := -delta_x / 2
-		hopped_piece_y := -(delta_y / 2) * 8
-		// fmt.Printf("%d, %d | %d %d", hopped_piece_x, hopped_piece_y, start, start+hopped_piece_x+hopped_piece_y)
-		hopped_piece := self.Pieces[hopped_piece_x+hopped_piece_y+start]
-
-		return hopped_piece.GetPieceTeam() != board.NoTeam && hopped_piece.GetPieceTeam() != starting_piece.GetPieceTeam()
-		// return false
+	destination = start + 2*(direction[0]+direction[1]*self.Width)
+	if destination >= self.Width*self.Height || destination < 0 {
+		return []int{}
 	}
-	return false
+
+	if self.Pieces[destination].GetPieceTeam() == board.NoTeam {
+		return []int{destination}
+	}
+
+	return []int{}
+}
+
+func CheckersCrawl(self board.Board, start int, directions [][2]int) []int {
+	var validMoveLocations []int = make([]int, 0)
+
+	for _, direction := range directions {
+		validMoveLocations = append(validMoveLocations, CheckersCrawlInDirection(self, start, direction)...)
+	}
+
+	return validMoveLocations
 }
