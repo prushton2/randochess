@@ -83,6 +83,7 @@ func DefaultPawn(self board.Board, start int) ([]int, []int) {
 		validMoveLocations = append(validMoveLocations, start+direction*self.Width)
 	}
 
+	// fix for skipping over pawn
 	if self.Pieces[start+direction*2*self.Width].GetPieceTeam() == board.NoTeam && !self.Pieces[start].GetPieceMoved() {
 		validMoveLocations = append(validMoveLocations, start+direction*2*self.Width)
 	}
@@ -101,7 +102,7 @@ func DefaultPawn(self board.Board, start int) ([]int, []int) {
 func DefaultRook(self board.Board, start int) ([]int, []int) {
 	var directions [][2]int = [][2]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
 
-	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, directions, true)
+	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, directions, true, -1)
 	// most pieces can take at the same spots they can move to, so i just return them both
 	return validMoveLocations, validMoveLocations
 }
@@ -116,7 +117,7 @@ func DefaultKnight(self board.Board, start int) ([]int, []int) {
 func DefaultBishop(self board.Board, start int) ([]int, []int) {
 	var directions [][2]int = [][2]int{{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
 
-	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, directions, true)
+	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, directions, true, -1)
 
 	// most pieces can take at the same spots they can move to, so i just return them both
 	return validMoveLocations, validMoveLocations

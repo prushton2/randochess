@@ -220,7 +220,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	gameInfo, exists := games[playerInfo.GameIndex]
 	if !exists {
 		http.Error(w, "Player points to invalid game", http.StatusBadRequest)
-		fmt.Printf("Error: %s\n", err)
+		// fmt.Printf("Error: %s\n", err)
 		io.WriteString(w, "")
 		mutex.Unlock()
 		return
@@ -230,7 +230,7 @@ func move(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Invalid Move: %s", err), http.StatusBadRequest)
 		io.WriteString(w, "")
-		fmt.Printf("Error: %s\n", err)
+		// fmt.Printf("Error: %s\n", err)
 		mutex.Unlock()
 		return
 	}
@@ -298,7 +298,7 @@ func main() {
 	games = make(map[int]game.Game)
 	codes = make(map[string]CodeInfo)
 
-	games[0], _ = game.New("Open World")
+	games[0], _ = game.New("PREPARE THYSELF")
 	codes["0"] = CodeInfo{GameIndex: 0, Team: board.White}
 	codes["1"] = CodeInfo{GameIndex: 0, Team: board.Black}
 
