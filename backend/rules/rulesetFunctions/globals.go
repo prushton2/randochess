@@ -91,7 +91,7 @@ func GetMoveLocationsFromDirections(self board.Board, start int, end int, direct
 				break
 			}
 
-			if CheckLineOfSight(self, start, destination) {
+			if (CheckLineOfSight(self, start, destination) && checkLOS) || !checkLOS {
 				validMoveLocations = append(validMoveLocations, destination)
 			} else {
 				break
