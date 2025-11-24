@@ -58,10 +58,10 @@ func (self *Game) Move(start int, end int) error {
 
 	if self.Board.Pieces[start].GetPieceTeam().OtherTeam() == self.Board.Pieces[end].GetPieceTeam() {
 		// we are taking another piece, so check the places the piece can take
-		_, validMoveSpots = rule(self.Board, start, end)
+		_, validMoveSpots = rule(self.Board, start)
 	} else {
 		// else check where they can move
-		validMoveSpots, _ = rule(self.Board, start, end)
+		validMoveSpots, _ = rule(self.Board, start)
 	}
 
 	if !slices.Contains(validMoveSpots[:], end) {

@@ -65,7 +65,7 @@ func DefaultInitBoard(self *board.Board) error {
 	return nil
 }
 
-func DefaultPawn(self board.Board, start int, end int) ([]int, []int) {
+func DefaultPawn(self board.Board, start int) ([]int, []int) {
 	var validMoveLocations []int = make([]int, 0)
 	var validTakeLocations []int = make([]int, 0)
 
@@ -98,41 +98,41 @@ func DefaultPawn(self board.Board, start int, end int) ([]int, []int) {
 	return validMoveLocations, validTakeLocations
 }
 
-func DefaultRook(self board.Board, start int, end int) ([]int, []int) {
+func DefaultRook(self board.Board, start int) ([]int, []int) {
 	var directions [][2]int = [][2]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
 
-	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, end, directions, true)
+	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, directions, true)
 	// most pieces can take at the same spots they can move to, so i just return them both
 	return validMoveLocations, validMoveLocations
 }
 
-func DefaultKnight(self board.Board, start int, end int) ([]int, []int) {
+func DefaultKnight(self board.Board, start int) ([]int, []int) {
 	var moveLocations [][2]int = [][2]int{{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}}
-	var validMoveLocations []int = GetMoveLocationsFromOffset(self, start, end, moveLocations)
+	var validMoveLocations []int = GetMoveLocationsFromOffset(self, start, moveLocations)
 
 	return validMoveLocations, validMoveLocations
 }
 
-func DefaultBishop(self board.Board, start int, end int) ([]int, []int) {
+func DefaultBishop(self board.Board, start int) ([]int, []int) {
 	var directions [][2]int = [][2]int{{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
 
-	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, end, directions, true)
+	var validMoveLocations []int = GetMoveLocationsFromDirections(self, start, directions, true)
 
 	// most pieces can take at the same spots they can move to, so i just return them both
 	return validMoveLocations, validMoveLocations
 }
 
-func DefaultKing(self board.Board, start int, end int) ([]int, []int) {
+func DefaultKing(self board.Board, start int) ([]int, []int) {
 	var offsets [][2]int = [][2]int{{1, 1}, {0, 1}, {-1, 1}, {1, 0}, {-1, 0}, {1, -1}, {0, -1}, {-1, -1}}
 
-	var validMoveLocations []int = GetMoveLocationsFromOffset(self, start, end, offsets)
+	var validMoveLocations []int = GetMoveLocationsFromOffset(self, start, offsets)
 
 	return validMoveLocations, validMoveLocations
 }
 
-func DefaultQueen(self board.Board, start int, end int) ([]int, []int) {
-	var bishopMoves, bishopTakes = DefaultBishop(self, start, end)
-	var rookMoves, rookTakes = DefaultRook(self, start, end)
+func DefaultQueen(self board.Board, start int) ([]int, []int) {
+	var bishopMoves, bishopTakes = DefaultBishop(self, start)
+	var rookMoves, rookTakes = DefaultRook(self, start)
 
 	return append(bishopMoves, rookMoves...), append(bishopTakes, rookTakes...)
 }

@@ -11,7 +11,7 @@ import (
 type Ruleset struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	PieceRules  map[board.PieceType]func(board.Board, int, int) ([]int, []int)
+	PieceRules  map[board.PieceType]func(board.Board, int) ([]int, []int)
 	Width       int
 	Height      int
 	Move        func(*board.Board, int, int, board.Team) board.Team

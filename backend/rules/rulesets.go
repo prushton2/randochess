@@ -9,7 +9,7 @@ var AllRulesets map[string]Ruleset = map[string]Ruleset{
 	"Default": {
 		Name:        "Default",
 		Description: "Chess",
-		PieceRules: map[board.PieceType]func(board.Board, int, int) ([]int, []int){
+		PieceRules: map[board.PieceType]func(board.Board, int) ([]int, []int){
 			board.Pawn:   rsf.DefaultPawn,
 			board.Rook:   rsf.DefaultRook,
 			board.Knight: rsf.DefaultKnight,
@@ -26,7 +26,7 @@ var AllRulesets map[string]Ruleset = map[string]Ruleset{
 	"Open World": {
 		Name:        "Open World",
 		Description: "Chess on a 16x16 board",
-		PieceRules: map[board.PieceType]func(board.Board, int, int) ([]int, []int){
+		PieceRules: map[board.PieceType]func(board.Board, int) ([]int, []int){
 			board.Pawn:   rsf.DefaultPawn,
 			board.Rook:   rsf.DefaultRook,
 			board.Knight: rsf.DefaultKnight,
@@ -43,7 +43,7 @@ var AllRulesets map[string]Ruleset = map[string]Ruleset{
 	"Oops! All Knights!": {
 		Name:        "Oops! All Knights!",
 		Description: "All your pieces are now knights",
-		PieceRules: map[board.PieceType]func(board.Board, int, int) ([]int, []int){
+		PieceRules: map[board.PieceType]func(board.Board, int) ([]int, []int){
 			board.Pawn:   rsf.DefaultKnight,
 			board.Rook:   rsf.DefaultKnight,
 			board.Knight: rsf.DefaultKnight,
@@ -94,7 +94,7 @@ var AllRulesets map[string]Ruleset = map[string]Ruleset{
 	"Atomic Chess": {
 		Name:        "Atomic Chess",
 		Description: "Whenever you take a piece, both your and the enemy's piece disappear",
-		PieceRules: map[board.PieceType]func(board.Board, int, int) ([]int, []int){
+		PieceRules: map[board.PieceType]func(board.Board, int) ([]int, []int){
 			board.Pawn:   rsf.DefaultPawn,
 			board.Rook:   rsf.DefaultRook,
 			board.Knight: rsf.DefaultKnight,
@@ -111,7 +111,7 @@ var AllRulesets map[string]Ruleset = map[string]Ruleset{
 	"Knook": {
 		Name:        "Knook",
 		Description: "The knight can now move like a rook",
-		PieceRules: map[board.PieceType]func(board.Board, int, int) ([]int, []int){
+		PieceRules: map[board.PieceType]func(board.Board, int) ([]int, []int){
 			board.Pawn:   rsf.DefaultPawn,
 			board.Rook:   rsf.Knook,
 			board.Knight: rsf.DefaultKnight,
@@ -128,7 +128,7 @@ var AllRulesets map[string]Ruleset = map[string]Ruleset{
 	"Dementia": {
 		Name:        "Dementia",
 		Description: "There is a random chance a piece will disappear every turn",
-		PieceRules: map[board.PieceType]func(board.Board, int, int) ([]int, []int){
+		PieceRules: map[board.PieceType]func(board.Board, int) ([]int, []int){
 			board.Pawn:   rsf.DefaultPawn,
 			board.Rook:   rsf.DefaultRook,
 			board.Knight: rsf.DefaultKnight,
@@ -145,7 +145,7 @@ var AllRulesets map[string]Ruleset = map[string]Ruleset{
 	"Checkers": {
 		Name:        "Checkers",
 		Description: "Its just checkers",
-		PieceRules: map[board.PieceType]func(board.Board, int, int) ([]int, []int){
+		PieceRules: map[board.PieceType]func(board.Board, int) ([]int, []int){
 			board.Pawn:   rsf.CheckersPawn,
 			board.Rook:   rsf.DefaultRook,
 			board.Knight: rsf.DefaultKnight,

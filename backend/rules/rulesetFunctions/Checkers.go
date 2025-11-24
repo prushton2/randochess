@@ -74,7 +74,7 @@ func CheckersMove(self *board.Board, start int, end int, team board.Team) board.
 	return team.OtherTeam()
 }
 
-func CheckersPawn(self board.Board, start int, end int) ([]int, []int) {
+func CheckersPawn(self board.Board, start int) ([]int, []int) {
 	var directions [][2]int = [][2]int{{1, 1}, {-1, 1}} // by default this is the directions black pieces can mmove in
 
 	// if white team, swap it so its (1, -1), (-1, -1)
@@ -88,7 +88,7 @@ func CheckersPawn(self board.Board, start int, end int) ([]int, []int) {
 	return validMoveLocations, validMoveLocations
 }
 
-func CheckersKing(self board.Board, start int, end int) ([]int, []int) {
+func CheckersKing(self board.Board, start int) ([]int, []int) {
 
 	var directions [][2]int = [][2]int{{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
 

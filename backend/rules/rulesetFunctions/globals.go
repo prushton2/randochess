@@ -62,7 +62,7 @@ func CheckLineOfSight(self board.Board, start int, end int) bool {
 
 // directions is an array of directions to check. A directions looks like {1, 0} or {-1, 1} where index 0 is the x and index 1 is the y, determining how to move along each axis.
 // This function will, for each direction, search until it hits the edge of the board or loses line of sight (if enabled). all board positions that are valid are returned.
-func GetMoveLocationsFromDirections(self board.Board, start int, end int, directions [][2]int, checkLOS bool) []int {
+func GetMoveLocationsFromDirections(self board.Board, start int, directions [][2]int, checkLOS bool) []int {
 	var validMoveLocations []int = make([]int, 0)
 	// construct an array of spaces where the piece can move.
 	// Iterate over every direction and look until we reach the edge of the board or a piece
@@ -105,7 +105,7 @@ func GetMoveLocationsFromDirections(self board.Board, start int, end int, direct
 
 // offsets is an array like directions, but contains offsets from the current piece's position. ie {2, 1}, {1, -2}. It returns all spaces that are inbounds. LOS checking is not possible here
 // because LOS checking only works on cardinal and diagonal directions, not directions where movement is different and nonzero in each direction
-func GetMoveLocationsFromOffset(self board.Board, start int, end int, offsets [][2]int) []int {
+func GetMoveLocationsFromOffset(self board.Board, start int, offsets [][2]int) []int {
 	var validMoveLocations []int = make([]int, 0)
 
 	for _, location := range offsets {

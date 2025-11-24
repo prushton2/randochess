@@ -37,27 +37,27 @@ func TestPawn_Move(t *testing.T) {
 
 	// White side no move
 	brd.Pieces[43].SetPieceTeam(board.White)
-	var move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+	var move, take = DefaultPawn(brd, 43) // end pos doesnt change the output
 
 	compareExpectedOut(t, move, take, []int{27, 35}, []int{})
 
 	// Black side no move
 	brd.Pieces[43].SetPieceTeam(board.Black)
 
-	move, take = DefaultPawn(brd, 43, -1)
+	move, take = DefaultPawn(brd, 43)
 
 	compareExpectedOut(t, move, take, []int{51, 59}, []int{})
 
 	// White side moved
 	brd.Pieces[43].SetPieceMoved()
 	brd.Pieces[43].SetPieceTeam(board.White)
-	move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+	move, take = DefaultPawn(brd, 43) // end pos doesnt change the output
 
 	compareExpectedOut(t, move, take, []int{35}, []int{})
 
 	// Black side moved
 	brd.Pieces[43].SetPieceTeam(board.Black)
-	move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+	move, take = DefaultPawn(brd, 43) // end pos doesnt change the output
 
 	compareExpectedOut(t, move, take, []int{51}, []int{})
 }
@@ -80,13 +80,13 @@ func TestPawn_Take(t *testing.T) {
 
 	// White piece taking
 	brd.Pieces[43].SetPieceTeam(board.White)
-	var move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+	var move, take = DefaultPawn(brd, 43) // end pos doesnt change the output
 
 	compareExpectedOut(t, move, take, []int{35, 27}, []int{36, 34})
 
 	// Black piece taking
 	brd.Pieces[43].SetPieceTeam(board.Black)
-	move, take = DefaultPawn(brd, 43, -1) // end pos doesnt change the output
+	move, take = DefaultPawn(brd, 43) // end pos doesnt change the output
 
 	compareExpectedOut(t, move, take, []int{51, 59}, []int{52, 50})
 }
@@ -97,7 +97,7 @@ func TestKnight(t *testing.T) {
 	brd := board.New(8, 8)
 	brd.Pieces[17].SetPieceTeam(board.White)
 	brd.Pieces[17].SetPieceType(board.Knight)
-	var move, take = DefaultKnight(brd, 18, -1) // end pos doesnt change the output
+	var move, take = DefaultKnight(brd, 18) // end pos doesnt change the output
 
 	compareExpectedOut(t, move, take, expected_out, expected_out)
 }
@@ -115,7 +115,7 @@ func TestRook(t *testing.T) {
 	brd.Pieces[51].SetPieceTeam(board.White)
 	brd.Pieces[51].SetPieceType(board.King)
 
-	var move, take = DefaultRook(brd, 35, -1) // end pos doesnt change the output
+	var move, take = DefaultRook(brd, 35) // end pos doesnt change the output
 
 	// fmt.Printf("t: %v\n", move)
 
@@ -135,7 +135,7 @@ func TestBishop(t *testing.T) {
 	brd.Pieces[49].SetPieceTeam(board.White)
 	brd.Pieces[49].SetPieceType(board.King)
 
-	var move, take = DefaultBishop(brd, 35, -1) // end pos doesnt change the output
+	var move, take = DefaultBishop(brd, 35) // end pos doesnt change the output
 
 	compareExpectedOut(t, move, take, expected_out, expected_out)
 }
@@ -147,7 +147,7 @@ func TestKing(t *testing.T) {
 	brd.Pieces[35].SetPieceTeam(board.White)
 	brd.Pieces[35].SetPieceType(board.King)
 
-	var move, take = DefaultKing(brd, 35, -1) // end pos doesnt change the output
+	var move, take = DefaultKing(brd, 35) // end pos doesnt change the output
 
 	compareExpectedOut(t, move, take, expected_out, expected_out)
 }
@@ -171,7 +171,7 @@ func TestQueen(t *testing.T) {
 	brd.Pieces[51].SetPieceTeam(board.White)
 	brd.Pieces[51].SetPieceType(board.King)
 
-	var move, take = DefaultQueen(brd, 35, -1)
+	var move, take = DefaultQueen(brd, 35)
 
 	compareExpectedOut(t, move, take, expected_out, expected_out)
 }

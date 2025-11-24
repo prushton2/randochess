@@ -2,7 +2,7 @@ package rulesetfunctions
 
 import "prushton.com/randochess/v2/board"
 
-func PrepareThyselfPawn(self board.Board, start int, end int) bool {
+func PrepareThyselfPawn(self board.Board, start int) bool {
 	return true // for now
 	// if self.Pieces[start].GetPieceMoved() {
 	// 	return DefaultPawn(self, start, end)
